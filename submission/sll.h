@@ -18,9 +18,8 @@ extern void unionSLL(SLL *recipient, SLL *donor);
 extern void *getSLL(SLL *items, int index);
 extern void *setSLL(SLL *items, int index, void *value);
 extern int sizeSLL(SLL *items);
-extern void displaySLL(SLL *items, FILE *);
-extern void displaySLLbrackets(SLL *items, FILE *, char open, char close);
-extern void displaySLLdebug(SLL *items, FILE *);
+extern void displaySLL(SLL *items, FILE *fp);
+extern void displaySLLdebug(SLL *items, FILE *fp);
 extern void freeSLL(SLL *items);
 
 #endif
