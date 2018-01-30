@@ -2,6 +2,7 @@
 
 struct stack {
 	SLL *l;
+	void (*display)(void *, FILE *);
 };
 
 // d is the display function
@@ -10,6 +11,7 @@ STACK *newSTACK(void (*d)(void *, FILE *), void (*f)(void *)) {
 	STACK *items = malloc(sizeof(STACK));
 	assert(items != NULL);
 	items->l = newSLL(d, f); // stack consists of a singly linked list
+	items->display = d; // for use by displaySTACK
 	return items;
 }
 
@@ -42,8 +44,17 @@ int sizeSTACK(STACK *items) {
 
 // Outputs in the format: |1,9,2,6,5|
 void displaySTACK(STACK *items, FILE *fp) {
-	displaySLLbrackets(items->l, fp, '|', '|');
-	return;
+	fputc('|', fp);
+
+	int i;
+	for (i = 0; i < sizeSLL(items->l); i++) {
+		if(i) { // Before all but the first
+			fputc(',', fp);
+		}
+		(items->display)(getSLL(items->l, i), fp);
+	}
+
+	fputc('|', fp);
 }
 
 // Outputs in the format: head->{1,9,2,6,5},tail->{5}

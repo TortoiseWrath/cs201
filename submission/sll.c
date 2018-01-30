@@ -1,7 +1,19 @@
 #include "sll.h"
+#include <stdlib.h>
+#include <assert.h>
 
+typedef struct sllnode SLL_NODE;
+
+// Functions to get nodes (not their values) from the list
 static SLL_NODE *getPrevNodeSLL(SLL *items, int index);
 static SLL_NODE *getNodeSLL(SLL *items, int index);
+
+// Storage of nodes
+static SLL_NODE *newSLL_NODE(void *value, SLL_NODE *next);
+static void *getSLL_NODEvalue(SLL_NODE *n);
+static SLL_NODE *getSLL_NODEnext(SLL_NODE *n);
+static void setSLL_NODEvalue(SLL_NODE *n, void *value);
+static void setSLL_NODEnext(SLL_NODE *n, SLL_NODE *next);
 
 struct sll {
 	SLL_NODE *head;
@@ -143,13 +155,8 @@ int sizeSLL(SLL *items) {
 // Outputs in the format: {5,6,2,9,1}
 // Uses the display function of the list.
 void displaySLL(SLL *items, FILE *fp) {
-	displaySLLbrackets(items, fp, '{', '}');
-}
-
-// So this code can be easily reused for stack ||
-void displaySLLbrackets(SLL *items, FILE *fp, char open, char close) {
 	assert(items->display != NULL);
-	fputc(open, fp);
+	fputc('{', fp);
 
 	SLL_NODE *n = items->head; // Start at the head
 	if(n != NULL) { // Skip if there is no head (empty)
@@ -164,7 +171,8 @@ void displaySLLbrackets(SLL *items, FILE *fp, char open, char close) {
 		while((n = getSLL_NODEnext(n))); // Step over nodes
 	}
 
-	fputc(close, fp);
+	fputc('}', fp);
+	return;
 }
 
 // Outputs in the format: head->{5,6,2,9,1},tail->{1}
@@ -180,6 +188,7 @@ void displaySLLdebug(SLL *items, FILE *fp) {
 		(items->display)(getSLL_NODEvalue(items->tail), fp); // Put the tail
 	}
 	fputc('}', fp);
+	return;
 }
 
 // Frees the values using the freeing function of the list.
@@ -198,11 +207,12 @@ void freeSLL(SLL *items) {
 	}
 	while((n = n2)); // Step over the nodes
 	free(items); // Free the SLL
+	return;
 }
 
 
 
-
+// Local functions to get nodes (not their values) from the list
 
 // Returns a pointer to the node before the node at the given index.
 // If the index is 0, returns a null pointer.
@@ -247,29 +257,14 @@ static SLL_NODE *getNodeSLL(SLL *items, int index) {
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+// Storage of nodes
 
 struct sllnode {
 	void *value;
 	void *next;
 };
 
-SLL_NODE *newSLL_NODE(void *value, SLL_NODE *next) {
+static SLL_NODE *newSLL_NODE(void *value, SLL_NODE *next) {
 	SLL_NODE *n = malloc(sizeof(SLL_NODE));
 	assert(n != NULL); // The memory allocated shall not be null.
 	n->value = value;
@@ -277,21 +272,21 @@ SLL_NODE *newSLL_NODE(void *value, SLL_NODE *next) {
 	return n;
 }
 
-void *getSLL_NODEvalue(SLL_NODE *n) {
+static void *getSLL_NODEvalue(SLL_NODE *n) {
 	assert(n->value != NULL);
 	return n->value;
 }
 
-SLL_NODE *getSLL_NODEnext(SLL_NODE *n) {
+static SLL_NODE *getSLL_NODEnext(SLL_NODE *n) {
 	return n->next;
 }
 
-void setSLL_NODEvalue(SLL_NODE *n, void *value) {
+static void setSLL_NODEvalue(SLL_NODE *n, void *value) {
 	n->value = value;
 	return;
 }
 
-void setSLL_NODEnext(SLL_NODE *n, SLL_NODE *next) {
+static void setSLL_NODEnext(SLL_NODE *n, SLL_NODE *next) {
 	n->next = next;
 	return;
 }

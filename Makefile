@@ -10,18 +10,18 @@ test-sll : test-sll.c sll.o integer.o integer.o
 test-dll : test-dll.c dll.o integer.o integer.o
 	gcc $(LOPTS) test-dll.c dll.o integer.o -o test-dll
 
-test-stack : test-stack.c stack.o integer.o integer.o
-	gcc $(LOPTS) test-stack.c stack.o integer.o -o test-stack
+test-stack : test-stack.c stack.o sll.o integer.o integer.o
+	gcc $(LOPTS) test-stack.c stack.o sll.o integer.o -o test-stack
 
-test-queue : test-queue.c queue.o integer.o integer.o
-	gcc $(LOPTS) test-queue.c queue.o integer.o -o test-queue
+test-queue : test-queue.c queue.o dll.o integer.o integer.o
+	gcc $(LOPTS) test-queue.c queue.o dll.o integer.o -o test-queue
 
 
 
-stack.o : stack.c stack.h sll.o
+stack.o : stack.c stack.h sll.h
 	gcc $(OOPTS) stack.c
 
-queue.o : queue.c queue.h dll.o
+queue.o : queue.c queue.h dll.h
 	gcc $(OOPTS) queue.c
 
 sll.o : sll.c sll.h
