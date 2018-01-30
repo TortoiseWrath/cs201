@@ -14,6 +14,7 @@ SLL_NODE *newSLL_NODE(void *value, SLL_NODE *next) {
 }
 
 void *getSLL_NODEvalue(SLL_NODE *n) {
+	assert(n->value != NULL);
 	return n->value;
 }
 

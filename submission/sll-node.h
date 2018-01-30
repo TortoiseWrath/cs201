@@ -1,5 +1,5 @@
-#ifndef __NODE_INCLUDED__
-#define __NODE_INCLUDED__
+#ifndef __SLL_NODE_INCLUDED__
+#define __SLL_NODE_INCLUDED__
 
 #include <stdio.h>
 #include <stdlib.h>

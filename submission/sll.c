@@ -13,8 +13,6 @@ struct sll {
 
 // newSLL implementation taken from the assignment.
 // Modified for conventions consistent with remainder of code.
-// Must be passed a display function for the stored values.
-// Should be passed a freeing function for the stored values.
 // d is the display function
 // f is the freeing function
 SLL *newSLL(void (*d)(void *, FILE *), void (*f)(void *)) {
@@ -71,8 +69,6 @@ void insertSLL(SLL *items, int index, void *value) {
 void *removeSLL(SLL *items, int index) {
 	assert(items->size >= 0);
 	assert(index >= 0);
-		/* The assignment states this assertion should be index > 0, but
-		   this is not intuitive and contradicts the sample testing program. */
 	assert(index < items->size);
 
 	SLL_NODE *prev = getPrevNodeSLL(items, index);
@@ -96,7 +92,7 @@ void *removeSLL(SLL *items, int index) {
 // Moves all items in the donor list to the end of the recipient list.
 // Runs in constant time.
 // Does not check whether any nodes are identical between the two lists.
-// If two nodes are identical there will be problems.
+// If two nodes are identical (same address) there will be problems.
 void unionSLL(SLL *recipient, SLL *donor) {
 	setSLL_NODEnext(recipient->tail, donor->head); // Transplant the donor head.
 	recipient->tail = donor->tail;
@@ -147,8 +143,13 @@ int sizeSLL(SLL *items) {
 // Outputs in the format: {5,6,2,9,1}
 // Uses the display function of the list.
 void displaySLL(SLL *items, FILE *fp) {
+	displaySLLbrackets(items, fp, '{', '}');
+}
 
-	fputc('{', fp);
+// So this code can be easily reused for stack || and queue <>
+void displaySLLbrackets(SLL *items, FILE *fp, char open, char close) {
+	assert(items->display != NULL);
+	fputc(open, fp);
 
 	SLL_NODE *n = items->head; // Start at the head
 	if(n != NULL) { // Skip if there is no head (empty)
@@ -157,18 +158,19 @@ void displaySLL(SLL *items, FILE *fp) {
 			if(!ishead) { // Put commas before non-head values
 				fputc(',', fp);
 			}
-			ishead = 0; // All values after head will be non-head]
+			ishead = 0; // All values after head will be non-head
 			(items->display)(getSLL_NODEvalue(n), fp);
 		}
 		while((n = getSLL_NODEnext(n))); // Step over nodes
 	}
 
-	fputc('}', fp);
+	fputc(close, fp);
 }
 
 // Outputs in the format: head->{5,6,2,9,1},tail->{1}
 // Uses the display function of the list.
 void displaySLLdebug(SLL *items, FILE *fp) {
+	assert(items->display != NULL);
 
 	fputs("head->", fp); // Start at the head
 	displaySLL(items, fp);
@@ -184,6 +186,8 @@ void displaySLLdebug(SLL *items, FILE *fp) {
 // Frees the nodes.
 // Frees the SLL.
 void freeSLL(SLL *items) {
+	assert(items->free != NULL);
+
 	SLL_NODE *n = items->head; // Start at the head
 	SLL_NODE *n2;
 	do {
@@ -193,8 +197,6 @@ void freeSLL(SLL *items) {
 		free(n); // Free the node
 	}
 	while((n = n2)); // Step over the nodes
-	free(n);
-	free(n2); // Free the spare node
 	free(items); // Free the SLL
 }
 
@@ -234,6 +236,10 @@ static SLL_NODE *getNodeSLL(SLL *items, int index) {
 	// At the very back of the list?
 	if(index == items->size - 1) {
 		return items->tail;
+	}
+
+	if(index == 0) {
+		return items->head;
 	}
 
 	// Note that the node is the node after the previous node.
