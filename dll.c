@@ -195,7 +195,7 @@ void displayDLL(DLL *items, FILE *fp) {
 	return;
 }
 
-// Outputs in the format: head->{{5,6,2,9,1}},tail->{{1,9,2,6,5}}
+// Outputs in the format: head->{{5,6,2,9,1}},tail->{{1}}
 void displayDLLdebug(DLL *items, FILE *fp) {
 	assert(items->display != NULL);
 
@@ -205,6 +205,7 @@ void displayDLLdebug(DLL *items, FILE *fp) {
 	fputs(",tail->{{", fp);
 	DLL_NODE *n = items->tail;
 	if(n != NULL) { // Skip if there is no tail (empty)
+		/* // Uncomment to display elements backwards from tail
 		int istail = 1;
 		do {
 			if(!istail) { // Put commas before non-tail values
@@ -214,6 +215,8 @@ void displayDLLdebug(DLL *items, FILE *fp) {
 			(items->display)(getDLL_NODEvalue(n), fp);
 		}
 		while((n = getDLL_NODEprev(n)));
+		*/
+		(items->display)(getDLL_NODEvalue(n), fp);
 	}
 
 	fputs("}}", fp);
