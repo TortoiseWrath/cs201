@@ -2,6 +2,12 @@
 #define __QUEUE_INCLUDED__
 
 #include <stdio.h>
+#include <stdlib.h>
+#include <assert.h>
+#include "dll.h"
+
+// These signatures taken from the assignment.
+// Modified for conventions consistent with remainder of code.
 
 typedef struct queue QUEUE;
 

@@ -2,8 +2,7 @@ OBJS = integer.o sll-node.o dll-node.o sll.o dll.o stack.o queue.o
 OOPTS = -Wall -Wextra -g -c -std=c99
 LOPTS = -Wall -Wextra -g -std=c99
 
-#all : test-sll test-dll test-stack test-queue
-all : test-sll test-dll test-stack
+all : test-sll test-dll test-stack test-queue
 
 test-sll : test-sll.c sll-node.c sll.c integer.c integer.o
 	gcc $(LOPTS) test-sll.c sll-node.c sll.c integer.c -o test-sll
@@ -14,16 +13,16 @@ test-dll : test-dll.c dll-node.h dll.h integer.h integer.o
 test-stack : test-stack.c stack.h sll-node.h sll.h integer.h integer.o
 	gcc $(LOPTS) test-stack.c stack.c sll-node.c sll.c integer.c -o test-stack
 
-#test-queue : test-queue.c queue.h sll-node.h sll.h integer.h integer.o
-#	gcc $(LOPTS) test-queue.c queue.h sll-node.h sll.h integer.h -o test-queue
+test-queue : test-queue.c queue.h dll-node.h dll.h integer.h integer.o
+	gcc $(LOPTS) test-queue.c queue.c dll-node.c dll.c integer.c -o test-queue
 
 
 
 stack.o : stack.c stack.h sll.h
 	gcc $(OOPTS) stack.c
 
-#queue.o : queue.c queue.h dll.h
-#	gcc $(OOPTS) queue.c
+queue.o : queue.c queue.h dll.h
+	gcc $(OOPTS) queue.c
 
 sll-node.o : sll-node.c sll-node.h
 	gcc $(OOPTS) sll-node.c
@@ -50,9 +49,9 @@ valgrind  : all
 	echo testing stack
 	valgrind ./test-stack
 	echo
-#	echo testing queue
-#	valgrind ./test-queue
-#	echo
+	echo testing queue
+	valgrind ./test-queue
+	echo
 
 test : all
 	echo testing singly-linked list
@@ -64,10 +63,9 @@ test : all
 	echo testing stack
 	./test-stack
 	echo
-#	echo testing queue
-#	./test-queue
-#	echo
+	echo testing queue
+	./test-queue
+	echo
 
 clean    :
-#	rm -f $(OBJS) test-*.o test-stack test-queue test-sll test-dll
-	rm -f $(OBJS) test-*.o test-stack test-sll test-dll
+	rm -f $(OBJS) test-*.o test-stack test-queue test-sll test-dll

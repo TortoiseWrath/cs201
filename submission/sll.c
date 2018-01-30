@@ -146,7 +146,7 @@ void displaySLL(SLL *items, FILE *fp) {
 	displaySLLbrackets(items, fp, '{', '}');
 }
 
-// So this code can be easily reused for stack || and queue <>
+// So this code can be easily reused for stack ||
 void displaySLLbrackets(SLL *items, FILE *fp, char open, char close) {
 	assert(items->display != NULL);
 	fputc(open, fp);
