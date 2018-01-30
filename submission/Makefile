@@ -4,8 +4,8 @@ LOPTS = -Wall -Wextra -g -std=c99
 
 all : test-sll test-dll test-stack test-queue
 
-test-sll : test-sll.c sll-node.c sll.c integer.c integer.o
-	gcc $(LOPTS) test-sll.c sll-node.c sll.c integer.c -o test-sll
+test-sll : test-sll.c sll.h integer.h integer.o
+	gcc $(LOPTS) test-sll.c sll.c integer.c -o test-sll
 
 test-dll : test-dll.c dll-node.h dll.h integer.h integer.o
 	gcc $(LOPTS) test-dll.c dll-node.c dll.c integer.c	 -o test-dll
