@@ -227,14 +227,13 @@ void displayDLLdebug(DLL *items, FILE *fp) {
 void freeDLL(DLL *items) {
 	assert(items->free != NULL);
 
-	DLL_NODE *n = items->head; // Start at the head
-	DLL_NODE *n2;
-	do {
+	DLL_NODE *n2 = items->head; // Start at the head
+	DLL_NODE *n;
+	while((n = n2)) {
 		(items->free)(getDLL_NODEvalue(n)); // Free the value
 		n2 = getDLL_NODEnext(n); // Save a pointer to the next node
 		free(n); // Free the node
 	}
-	while((n = n2)); // Step over the nodes
 
 	free(items); // Free the DLL
 
