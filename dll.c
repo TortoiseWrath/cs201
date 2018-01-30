@@ -159,8 +159,13 @@ int sizeDLL(DLL *items) {
 
 // Outputs in the format: {{5, 6, 2, 9, 1}}
 void displayDLL(DLL *items, FILE *fp) {
+	displayDLLbrackets(items, fp, "{{", "}}");
+}
+
+// So this code can be easily reused for stack ||
+void displayDLLbrackets(DLL *items, FILE *fp, char *open, char *close) {
 	assert(items->display != NULL);
-	fputs("{{", fp);
+	fputs(open, fp);
 
 	DLL_NODE *n = items->head; // Start at the head
 	if(n != NULL) { // Skip if there is no head (empty)
@@ -175,7 +180,7 @@ void displayDLL(DLL *items, FILE *fp) {
 		while((n = getDLL_NODEnext(n)));
 	}
 
-	fputs("}}", fp);
+	fputs(close, fp);
 }
 
 // Outputs in the format: head->{{5,6,2,9,1}},tail->{{1,9,2,6,5}}

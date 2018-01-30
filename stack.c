@@ -26,12 +26,18 @@ void *pop(STACK *items) {
 /* Assignment uses both void *pop(STACK *) and void *removeSTACK(stack *)
    so I am adding this as well */
 void *removeSTACK(STACK *items) {
+	assert(sizeSTACK(items) > 0);
 	return pop(items);
 }
 
 // Returns a pointer to the value of the item ready to come off the stack.
 void *peekSTACK(STACK *items) {
+	assert(sizeSTACK(items) > 0);
 	return getSLL(items->l, 0); // peek at the head
+}
+
+int sizeSTACK(STACK *items) {
+	return sizeSLL(items->l);
 }
 
 // Outputs in the format: |1,9,2,6,5|
