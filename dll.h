@@ -19,7 +19,7 @@ extern void *getDLL(DLL *items, int index);
 extern void *setDLL(DLL *items, int index, void *value);
 extern int sizeDLL(DLL *items);
 extern void displayDLL(DLL *items, FILE *);
-extern void displayDLLbrackets(DLL *items, FILE *, char open, char close);
+extern void displayDLLbrackets(DLL *items, FILE *, char *open, char *close);
 extern void displayDLLdebug(DLL *items, FILE *);
 extern void freeDLL(DLL *items);
 
