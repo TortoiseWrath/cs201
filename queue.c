@@ -2,6 +2,7 @@
 
 struct queue {
 	DLL *l;
+	void (*display)(void *, FILE *);
 };
 
 // d is the display function
@@ -10,6 +11,7 @@ QUEUE *newQUEUE(void (*d)(void *, FILE *), void (*f)(void *)) {
 	QUEUE *items = malloc(sizeof(QUEUE));
 	assert(items != NULL);
 	items->l = newDLL(d, f); // queue consists of a doubly linked list
+	items->display = d; // for use by displayQUEUE
 	return items;
 }
 
@@ -36,7 +38,17 @@ int sizeQUEUE(QUEUE *items) {
 
 // Outputs in the format: <5,6,2,9,1>
 void displayQUEUE(QUEUE *items, FILE *fp) {
-	displayDLLbrackets(items->l, fp, "<", ">");
+	fputc('<', fp);
+
+	int i;
+	for (i = 0; i < sizeDLL(items->l); i++) {
+		if(i) { // Before all but the first
+			fputc(',', fp);
+		}
+		(items->display)(getDLL(items->l, i), fp);
+	}
+
+	fputc('>', fp);
 	return;
 }
 

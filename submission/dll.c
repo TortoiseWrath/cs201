@@ -1,4 +1,20 @@
 #include "dll.h"
+#include <stdlib.h>
+#include <assert.h>
+
+typedef struct dllnode DLL_NODE;
+
+// Storage of nodes
+
+extern DLL_NODE *newDLL_NODE(void *value, DLL_NODE *next, DLL_NODE *prev);
+extern void *getDLL_NODEvalue(DLL_NODE *n);
+extern DLL_NODE *getDLL_NODEnext(DLL_NODE *n);
+extern DLL_NODE *getDLL_NODEprev(DLL_NODE *n);
+extern void setDLL_NODEvalue(DLL_NODE *n, void *value);
+extern void setDLL_NODEnext(DLL_NODE *n, DLL_NODE *next);
+extern void setDLL_NODEprev(DLL_NODE *n, DLL_NODE *prev);
+
+// Local function to get a node (not a value) from the list
 
 static DLL_NODE *getNodeDLL(DLL *items, int index);
 
@@ -159,13 +175,8 @@ int sizeDLL(DLL *items) {
 
 // Outputs in the format: {{5, 6, 2, 9, 1}}
 void displayDLL(DLL *items, FILE *fp) {
-	displayDLLbrackets(items, fp, "{{", "}}");
-}
-
-// So this code can be easily reused for stack ||
-void displayDLLbrackets(DLL *items, FILE *fp, char *open, char *close) {
 	assert(items->display != NULL);
-	fputs(open, fp);
+	fputs("{{", fp);
 
 	DLL_NODE *n = items->head; // Start at the head
 	if(n != NULL) { // Skip if there is no head (empty)
@@ -180,7 +191,8 @@ void displayDLLbrackets(DLL *items, FILE *fp, char *open, char *close) {
 		while((n = getDLL_NODEnext(n)));
 	}
 
-	fputs(close, fp);
+	fputs("}}", fp);
+	return;
 }
 
 // Outputs in the format: head->{{5,6,2,9,1}},tail->{{1,9,2,6,5}}
@@ -205,6 +217,7 @@ void displayDLLdebug(DLL *items, FILE *fp) {
 	}
 
 	fputs("}}", fp);
+	return;
 }
 
 // Frees the values using the freeing function of the list.
@@ -230,7 +243,7 @@ void freeDLL(DLL *items) {
 
 
 
-
+// Local function to get a node (not a value) from the list
 
 // Returns a pointer to the node at the given index.
 // Runs in constant time for nodes at a constant distance from the front.
@@ -262,4 +275,51 @@ static DLL_NODE *getNodeDLL(DLL *items, int index) {
 
 	assert(n != NULL);
 	return n;
+}
+
+
+
+// Storage of nodes
+
+struct dllnode {
+	void *value;
+	DLL_NODE *next;
+	DLL_NODE *prev;
+};
+
+DLL_NODE *newDLL_NODE(void *value, DLL_NODE *next, DLL_NODE *prev) {
+	DLL_NODE *n = malloc(sizeof(DLL_NODE));
+	assert(n != NULL); // The memory allocated shall not be null.
+	n->value = value;
+	n->next = next;
+	n->prev = prev;
+	return n;
+}
+
+void *getDLL_NODEvalue(DLL_NODE *n) {
+	assert(n->value != NULL);
+	return n->value;
+}
+
+DLL_NODE *getDLL_NODEnext(DLL_NODE *n) {
+	return n->next;
+}
+
+DLL_NODE *getDLL_NODEprev(DLL_NODE *n) {
+	return n->prev;
+}
+
+void setDLL_NODEvalue(DLL_NODE *n, void *value) {
+	n->value = value;
+	return;
+}
+
+void setDLL_NODEnext(DLL_NODE *n, DLL_NODE *next) {
+	n->next = next;
+	return;
+}
+
+void setDLL_NODEprev(DLL_NODE *n, DLL_NODE *prev) {
+	n->prev = prev;
+	return;
 }

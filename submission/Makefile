@@ -1,20 +1,20 @@
-OBJS = integer.o sll-node.o dll-node.o sll.o dll.o stack.o queue.o
+OBJS = integer.o sll.o dll.o stack.o queue.o
 OOPTS = -Wall -Wextra -g -c -std=c99
 LOPTS = -Wall -Wextra -g -std=c99
 
 all : test-sll test-dll test-stack test-queue
 
-test-sll : test-sll.c sll.h integer.h integer.o
-	gcc $(LOPTS) test-sll.c sll.c integer.c -o test-sll
+test-sll : test-sll.c sll.o integer.o integer.o
+	gcc $(LOPTS) test-sll.c sll.o integer.o -o test-sll
 
-test-dll : test-dll.c dll-node.h dll.h integer.h integer.o
-	gcc $(LOPTS) test-dll.c dll-node.c dll.c integer.c	 -o test-dll
+test-dll : test-dll.c dll.o integer.o integer.o
+	gcc $(LOPTS) test-dll.c dll.o integer.o -o test-dll
 
-test-stack : test-stack.c stack.h sll-node.h sll.h integer.h integer.o
-	gcc $(LOPTS) test-stack.c stack.c sll-node.c sll.c integer.c -o test-stack
+test-stack : test-stack.c stack.o sll.o integer.o integer.o
+	gcc $(LOPTS) test-stack.c stack.o sll.o integer.o -o test-stack
 
-test-queue : test-queue.c queue.h dll-node.h dll.h integer.h integer.o
-	gcc $(LOPTS) test-queue.c queue.c dll-node.c dll.c integer.c -o test-queue
+test-queue : test-queue.c queue.o dll.o integer.o integer.o
+	gcc $(LOPTS) test-queue.c queue.o dll.o integer.o -o test-queue
 
 
 
@@ -23,12 +23,6 @@ stack.o : stack.c stack.h sll.h
 
 queue.o : queue.c queue.h dll.h
 	gcc $(OOPTS) queue.c
-
-sll-node.o : sll-node.c sll-node.h
-	gcc $(OOPTS) sll-node.c
-
-dll-node.o : dll-node.c dll-node.h
-	gcc $(OOPTS) dll-node.c
 
 sll.o : sll.c sll.h
 	gcc $(OOPTS) sll.c

@@ -15,17 +15,17 @@ static void showItems(QUEUE *items) {
 
 int main() {
 	QUEUE *items = newQUEUE(displayINTEGER, freeINTEGER);
-	showItems(items); // ||
+	showItems(items); // <>
 
 	INTEGER *x = newINTEGER(5);
 	enqueue(items, x);
-	showItems(items); // |5|
+	showItems(items); // <5>
 
 	setINTEGER(x, 77);
-	showItems(items); // |77|
+	showItems(items); // <77>
 	displayINTEGER(dequeue(items), stdout); // 77
 	putc('\n', stdout);
-	showItems(items); // ||
+	showItems(items); // <>
 
 	x = newINTEGER(1232);
 	enqueue(items, x);
@@ -43,13 +43,13 @@ int main() {
 	enqueue(items, x);
 	x = newINTEGER(6);
 	enqueue(items, x);
-	showItems(items); // |6,-4,68,3,19,111,78,1232|
+	showItems(items); // <1232,78,111,19,3,68,-4,6>
 
-	displayINTEGER(peekQUEUE(items), stdout); // 6
+	displayINTEGER(peekQUEUE(items), stdout); // 1232
 	putc('\n', stdout);
-	displayINTEGER(dequeue(items), stdout); // 6
+	displayINTEGER(dequeue(items), stdout); // 1232
 	putc('\n', stdout);
-	showItems(items); // |-4,68,3,19,111,78,1232|
+	showItems(items); // <78,111,19,3,68,-4,6>
 
 	freeQUEUE(items);
 	return 0;
