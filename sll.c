@@ -106,7 +106,15 @@ void *removeSLL(SLL *items, int index) {
 // Does not check whether any nodes are identical between the two lists.
 // If two nodes are identical (same address) there will be problems.
 void unionSLL(SLL *recipient, SLL *donor) {
-	setSLL_NODEnext(recipient->tail, donor->head); // Transplant the donor head.
+	if(donor->size == 0) { //empty donor
+		return; //do nothing
+	}
+	if(recipient->size == 0) {
+		recipient->head = donor->head;
+	}
+	else {
+		setSLL_NODEnext(recipient->tail, donor->head); // Transplant the head.
+	}
 	recipient->tail = donor->tail;
 	recipient->size += donor->size; // Sum the sizes.
 
