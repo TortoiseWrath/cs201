@@ -2,9 +2,6 @@
 #define __STACK_INCLUDED__
 
 #include <stdio.h>
-#include <stdlib.h>
-#include <assert.h>
-#include "sll.h"
 
 // These signatures taken from the assignment.
 // Modified for conventions consistent with remainder of code.

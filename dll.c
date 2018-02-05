@@ -123,8 +123,16 @@ void *removeDLL(DLL *items, int index) {
 // Does not check whether any nodes are identical between the two lists.
 // If two nodes are identical (same address) there will be problems.
 void unionDLL(DLL *recipient, DLL *donor) {
-	setDLL_NODEnext(recipient->tail, donor->head); // Transplant the donor head.
-	setDLL_NODEprev(donor->head, recipient->tail);
+	if(donor->size == 0) {
+		return; // do nothing
+	}
+	if(recipient->size == 0) {
+		recipient->head = donor->head;
+	}
+	else {
+		setDLL_NODEnext(recipient->tail, donor->head); // Transplant the head.
+		setDLL_NODEprev(donor->head, recipient->tail);
+	}
 	recipient->tail = donor->tail;
 	recipient->size += donor->size;
 
