@@ -10,11 +10,19 @@ struct bstnode {
 	BSTNODE *parent;
 };
 
+struct bst {
+	BSTNODE *root;
+	int size;
+	void (*display)(void *, FILE *);
+	int (*comparator)(void *, void *);
+	void (*swapper)(BSTNODE *, BSTNODE *);
+	void (*f)(void *);
+};
+
 static void genericSwapper(BSTNODE *a, BSTNODE *b);
-static void maxDepth(BSTNODE *n);
-static void minDepth(BSTNODE *n);
+static int maxDepth(BSTNODE *n);
+static int minDepth(BSTNODE *n);
 static void displaySubtree(BSTNODE *n, FILE *fp, void (*display)(void *, FILE *));
-static void displaySubtreeDebug(BSTNODE *n, FILE *fp, void (*display)(void *, FILE *));
 
 BSTNODE *newBSTNODE(void *v) {
 	BSTNODE *node = malloc(sizeof(BSTNODE));
@@ -58,7 +66,7 @@ BSTNODE *getBSTNODEparent(BSTNODE *n) {
 	return n->parent;
 }
 
-void setBSTNODEparent(BSTNODE *n,B STNODE *replacement) {
+void setBSTNODEparent(BSTNODE *n, BSTNODE *replacement) {
 	n->parent = replacement;
 	return;
 }
@@ -69,18 +77,9 @@ void freeBSTNODE(BSTNODE *n, void (*f)(void *)) {
 	return;
 }
 
-struct BST {
-	BSTNODE *root;
-	int size;
-	void (*display)(void *, FILE *);
-	int (*comparator)(void *, void *);
-	void (*swapper)(BSTNODE *, BSTNODE *);
-	void (*f)(void *);
-};
-
 BST *newBST(
 	void (*display)(void *, FILE *),
-	void (*comparator)(void *, void *),
+	int (*comparator)(void *, void *),
 	void (*swapper)(BSTNODE *, BSTNODE *),
 	void (*f)(void *)
 ) {
@@ -152,8 +151,8 @@ BSTNODE *insertBST(BST *t, void *value) {
 BSTNODE *findBST(BST *t, void *value) {
 	//Algorithm: Cormen et al. 291
 	BSTNODE *x = getBSTroot(t);
-	while(x != NULL && comparator(value, getBSTNODEvalue(x)) != 0) {
-		if (comparator(value, getBSTNODEvalue(x)) < 0) { // k < x
+	while(x != NULL && t->comparator(value, getBSTNODEvalue(x)) != 0) {
+		if (t->comparator(value, getBSTNODEvalue(x)) < 0) { // k < x
 			x = getBSTNODEleft(x);
 		}
 		else {
@@ -171,7 +170,7 @@ BSTNODE *deleteBST(BST *t, void *value) {
 }
 
 BSTNODE *swapToLeafBST(BST *t, BSTNODE *node) {
-	if(node == NULL || getBSTNODEleft(node) == NULL && getBSTNODEright(node) == NULL) {
+	if(node == NULL || (getBSTNODEleft(node) == NULL && getBSTNODEright(node) == NULL)) {
 		return node;
 	}
 
@@ -268,7 +267,7 @@ static void displaySubtree(BSTNODE *root, FILE *fp, void (*display)(void *, FILE
 void displayBSTdebug(BST *t, FILE *fp) {
 	if(sizeBST(t) == 0) return;
 	QUEUE *q = newQUEUE(NULL, NULL);
-	enqueue(q, root);
+	enqueue(q, getBSTroot(t));
 	while(sizeQUEUE(q) > 0) {
 		BSTNODE *n = dequeue(q);
 		t->display(getBSTNODEvalue(n), fp);
