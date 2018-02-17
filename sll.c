@@ -203,15 +203,16 @@ void displaySLLdebug(SLL *items, FILE *fp) {
 // Frees the nodes.
 // Frees the SLL.
 void freeSLL(SLL *items) {
-	if(items->free != NULL) {
-		SLL_NODE *n; // Start at the head
-		SLL_NODE *n2 = items->head; // Start at the head
-		while((n = n2)) {
+	SLL_NODE *n; // Start at the head
+	SLL_NODE *n2 = items->head; // Start at the head
+	while((n = n2)) {
+		if(items->free != NULL) {
 			(items->free)(getSLL_NODEvalue(n)); // Free the value
-			n2 = getSLL_NODEnext(n); // Save a pointer to the next node
-			free(n); // Free the node
 		}
+		n2 = getSLL_NODEnext(n); // Save a pointer to the next node
+		free(n); // Free the node
 	}
+	free(n2);
 
 	free(items); // Free the SLL
 	return;
