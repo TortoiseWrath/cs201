@@ -146,6 +146,7 @@ BSTNODE *insertBST(BST *t, void *value) {
 
 	//Increment the size of the tree
 	setBSTsize(t, sizeBST(t) + 1);
+	return z;
 }
 
 BSTNODE *findBST(BST *t, void *value) {
@@ -223,7 +224,7 @@ int sizeBST(BST *t) {
 void statisticsBST(BST *t, FILE *fp) {
 	fprintf(fp, "Nodes: %i\n", sizeBST(t));
 	fprintf(fp, "Minimum depth: %i\n", minDepth(getBSTroot(t)));
-	fprintf(fp, "Maximum depth: %i\n", minDepth(getBSTroot(t)));
+	fprintf(fp, "Maximum depth: %i\n", maxDepth(getBSTroot(t)));
 }
 
 int maxDepth(BSTNODE *n) {
@@ -266,19 +267,21 @@ static void displaySubtree(BSTNODE *root, FILE *fp, void (*display)(void *, FILE
 
 void displayBSTdebug(BST *t, FILE *fp) {
 	if(sizeBST(t) == 0) return;
-	QUEUE *q = newQUEUE(NULL, NULL);
-	enqueue(q, getBSTroot(t));
-	while(sizeQUEUE(q) > 0) {
-		BSTNODE *n = dequeue(q);
+	QUEUE *q1 = newQUEUE(NULL, NULL);
+	QUEUE *q2 = newQUEUE(NULL, NULL);
+	enqueue(q1, getBSTroot(t));
+	while(sizeQUEUE(q1) > 0) {
+		BSTNODE *n = dequeue(q1);
 		t->display(getBSTNODEvalue(n), fp);
-		if(getBSTNODEleft(n) != NULL) {
-			enqueue(q, getBSTNODEleft(n));
-		}
-		if(getBSTNODEright(n) != NULL) {
-			enqueue(q, getBSTNODEright(n));
+		fputc(sizeQUEUE(q1)?' ':'\n', fp);
+		if(getBSTNODEleft(n)) enqueue(q2, getBSTNODEleft(n));
+		if(getBSTNODEright(n)) enqueue(q2, getBSTNODEright(n));
+		if(sizeQUEUE(q1) == 0) {
+			freeQUEUE(q1);
+			q1 = q2;
+			q2 = newQUEUE(NULL, NULL);
 		}
 	}
-	freeQUEUE(q);
 	return;
 }
 

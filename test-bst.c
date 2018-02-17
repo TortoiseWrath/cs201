@@ -10,6 +10,8 @@ int main() {
 	fputc('\n',stdout);
 	displayBSTdebug(t, stdout);
 	fputc('\n',stdout);
+	statisticsBST(t, stdout);
+	fputc('\n',stdout);
 	INTEGER *x = newINTEGER(68);
 	insertBST(t, x);
 	x = newINTEGER(54);
@@ -35,6 +37,8 @@ int main() {
 	displayBST(t, stdout);
 	fputc('\n',stdout);
 	displayBSTdebug(t, stdout);
+	fputc('\n',stdout);
+	statisticsBST(t, stdout);
 	fputc('\n',stdout);
 	freeBST(t);
 	return 0;
