@@ -40,6 +40,64 @@ int main() {
 	fputc('\n',stdout);
 	statisticsBST(t, stdout);
 	fputc('\n',stdout);
+
+	deleteBST(t, newINTEGER(55));
+	displayBST(t, stdout);
+	fputc('\n',stdout);
+	displayBSTdebug(t, stdout);
+	fputc('\n',stdout);
+	statisticsBST(t, stdout);
+	fputc('\n',stdout);
+
+	deleteBST(t, newINTEGER(75));
+	displayBST(t, stdout);
+	fputc('\n',stdout);
+	displayBSTdebug(t, stdout);
+	fputc('\n',stdout);
+	statisticsBST(t, stdout);
+	fputc('\n',stdout);
+
+	deleteBST(t, newINTEGER(48));
+	displayBST(t, stdout);
+	fputc('\n',stdout);
+	displayBSTdebug(t, stdout);
+	fputc('\n',stdout);
+	statisticsBST(t, stdout);
+	fputc('\n',stdout);
+
+	deleteBST(t, newINTEGER(68));
+	displayBST(t, stdout);
+	fputc('\n',stdout);
+	displayBSTdebug(t, stdout);
+	fputc('\n',stdout);
+	statisticsBST(t, stdout);
+	fputc('\n',stdout);
+
+	deleteBST(t, newINTEGER(54));
+	displayBST(t, stdout);
+	fputc('\n',stdout);
+	displayBSTdebug(t, stdout);
+	fputc('\n',stdout);
+	statisticsBST(t, stdout);
+	fputc('\n',stdout);
+
+	insertBST(t, newINTEGER(91));
+	displayBST(t, stdout);
+	fputc('\n',stdout);
+	displayBSTdebug(t, stdout);
+	fputc('\n',stdout);
+	statisticsBST(t, stdout);
+	fputc('\n',stdout);
+
+	insertBST(t, newINTEGER(68));
+	displayBST(t, stdout);
+	fputc('\n',stdout);
+	displayBSTdebug(t, stdout);
+	fputc('\n',stdout);
+	statisticsBST(t, stdout);
+	fputc('\n',stdout);
+
 	freeBST(t);
+	freeINTEGER(x);
 	return 0;
 }

@@ -72,7 +72,7 @@ void setBSTNODEparent(BSTNODE *n, BSTNODE *replacement) {
 }
 
 void freeBSTNODE(BSTNODE *n, void (*f)(void *)) {
-	if(f != NULL) f(n);
+	if(f != NULL) f(getBSTNODEvalue(n));
 	free(n);
 	return;
 }
@@ -282,10 +282,16 @@ void displayBSTdebug(BST *t, FILE *fp) {
 			q2 = newQUEUE(NULL, NULL);
 		}
 	}
+	freeQUEUE(q1);
+	freeQUEUE(q2);
 	return;
 }
 
 
 void freeBST(BST *t) {
- //todo
+	while(sizeBST(t) > 0) {
+		BSTNODE *n = deleteBST(t, getBSTNODEvalue(getBSTroot(t))); //delete the root (easy to find)
+		freeBSTNODE(n, t->f); //free the old root
+	}
+	free(t);
 }
