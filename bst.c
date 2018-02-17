@@ -1,5 +1,6 @@
 #include "bst.h"
 #include <assert.h>
+#include <malloc.h>
 #include "queue.h"
 
 struct bstnode {
