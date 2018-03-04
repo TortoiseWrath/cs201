@@ -43,6 +43,7 @@ void insertHEAP(HEAP *h, void *value) {
 	}
 	else if(sizeBST(t) == 1) { // insert left of root
 		setBSTNODEleft(getBSTroot(t), node);
+		setBSTNODEparent(node, getBSTroot(t));
 		setBSTsize(t, 2);
 	}
 	else {
@@ -50,17 +51,21 @@ void insertHEAP(HEAP *h, void *value) {
 		BSTNODE *parent = getBSTNODEparent(last); // get the parent of that node
 		if(getBSTNODEright(parent) == NULL) { // if the last node has no sibling
 			setBSTNODEright(parent, node);
+			setBSTNODEparent(node, parent);
 		}
 		else if(sizeBST(t) == 3) { //add a third level
 			setBSTNODEleft(getBSTNODEleft(parent), node);
+			setBSTNODEparent(node, getBSTNODEleft(parent));
 		}
 		else { // check the parent node's sibling for empty children
 			BSTNODE *uncle = getBSTNODEright(getBSTNODEparent(parent));
 			if(getBSTNODEleft(uncle) == NULL) {
 				setBSTNODEleft(uncle, node);
+				setBSTNODEparent(node, uncle);
 			}
 			else if(getBSTNODEright(uncle) == NULL) {
 				setBSTNODEright(uncle, node);
+				setBSTNODEparent(node, uncle);
 			}
 			else { // add a new level to the tree
 				BSTNODE *cur = getBSTroot(t);
@@ -69,6 +74,7 @@ void insertHEAP(HEAP *h, void *value) {
 				}
 				//cur is now the leftmost leaf
 				setBSTNODEleft(cur, node);
+				setBSTNODEparent(node, cur);
 			}
 		}
 
@@ -100,6 +106,7 @@ void buildHEAP(HEAP *h) {
 
 static void heapify(HEAP *h, BSTNODE *i) {
 	// Algorithm: Cormen et al. 154
+	if(i == NULL) return;
 	BSTNODE *l = getBSTNODEleft(i);
 	BSTNODE *r = getBSTNODEright(i);
 	BSTNODE *largest;
@@ -149,23 +156,31 @@ void *peekHEAP(HEAP *h) {
 void *extractHEAP(HEAP *h) {
 	// Algorithm: Cormen et al. 163
 	assert(sizeHEAP(h) > 0);
+
 	BSTNODE *root = getBSTroot(h->tree);
 	void *val = getBSTNODEvalue(root); // store the current value of the root
-	BSTNODE *last = pop(h->nodestack);
-	setBSTNODEvalue(root, getBSTNODEvalue(last)); // move the last value into the root
+	if(sizeHEAP(h) != 1) {
+		BSTNODE *last = pop(h->nodestack);
+		setBSTNODEvalue(root, getBSTNODEvalue(last)); // move the last value into the root
 
-	// get rid of the last node
-	BSTNODE *parent = getBSTNODEparent(last);
-	if(getBSTNODEleft(parent) == last) {
-		setBSTNODEleft(parent, NULL);
+		// get rid of the last node
+		BSTNODE *parent = getBSTNODEparent(last);
+		if(getBSTNODEleft(parent) == last) {
+			setBSTNODEleft(parent, NULL);
+		}
+		else {
+			setBSTNODEright(parent, NULL);
+		}
+		freeBSTNODE(last, NULL);
 	}
 	else {
-		setBSTNODEright(parent, NULL);
+		freeBSTNODE(root, NULL);
 	}
-	freeBSTNODE(last, NULL);
 	setBSTsize(h->tree, sizeBST(h->tree) - 1);
 
-	heapify(h, root); // heapify from the new root
+	if(sizeHEAP(h) > 1) {
+		heapify(h, root); // heapify from the new root
+	}
 	return val; // return the old value of the root
 }
 
@@ -184,6 +199,13 @@ void displayHEAPdebug(HEAP *h, FILE *fp) {
 }
 
 void freeHEAP(HEAP *h) {
+	while(sizeHEAP(h) > 0) {
+		void *v = extractHEAP(h);
+		if(h->f != NULL) {
+			h->f(v);
+		}
+	}
 	freeBST(h->tree);
+	freeSTACK(h->nodestack);
 	free(h);
 }

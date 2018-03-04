@@ -41,7 +41,8 @@ int main() {
 	statisticsBST(t, stdout);
 	fputc('\n',stdout);
 
-	deleteBST(t, newINTEGER(55));
+	x = newINTEGER(55);
+	freeBSTNODE(deleteBST(t, x), freeINTEGER);
 	displayBST(t, stdout);
 	fputc('\n',stdout);
 	displayBSTdebug(t, stdout);
@@ -49,7 +50,9 @@ int main() {
 	statisticsBST(t, stdout);
 	fputc('\n',stdout);
 
-	deleteBST(t, newINTEGER(75));
+	freeINTEGER(x);
+	x = newINTEGER(75);
+	freeBSTNODE(deleteBST(t, x), freeINTEGER);
 	displayBST(t, stdout);
 	fputc('\n',stdout);
 	displayBSTdebug(t, stdout);
@@ -57,7 +60,9 @@ int main() {
 	statisticsBST(t, stdout);
 	fputc('\n',stdout);
 
-	deleteBST(t, newINTEGER(48));
+	freeINTEGER(x);
+	x = newINTEGER(48);
+	freeBSTNODE(deleteBST(t, x), freeINTEGER);
 	displayBST(t, stdout);
 	fputc('\n',stdout);
 	displayBSTdebug(t, stdout);
@@ -65,7 +70,9 @@ int main() {
 	statisticsBST(t, stdout);
 	fputc('\n',stdout);
 
-	deleteBST(t, newINTEGER(68));
+	freeINTEGER(x);
+	x = newINTEGER(68);
+	freeBSTNODE(deleteBST(t, x), freeINTEGER);
 	displayBST(t, stdout);
 	fputc('\n',stdout);
 	displayBSTdebug(t, stdout);
@@ -73,7 +80,9 @@ int main() {
 	statisticsBST(t, stdout);
 	fputc('\n',stdout);
 
-	deleteBST(t, newINTEGER(54));
+	freeINTEGER(x);
+	x = newINTEGER(54);
+	freeBSTNODE(deleteBST(t, x), freeINTEGER);
 	displayBST(t, stdout);
 	fputc('\n',stdout);
 	displayBSTdebug(t, stdout);
@@ -97,6 +106,7 @@ int main() {
 	statisticsBST(t, stdout);
 	fputc('\n',stdout);
 
+	
 	freeBST(t);
 	freeINTEGER(x);
 	return 0;

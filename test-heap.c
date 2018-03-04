@@ -3,6 +3,9 @@
 #include "heap.h"
 #include "integer.h"
 
+int rcompareINTEGER(void *a, void *b) {
+	return -1 * compareINTEGER(a, b);
+}
 
 int main() {
 	HEAP *t = newHEAP(displayINTEGER, compareINTEGER, freeINTEGER);
@@ -19,7 +22,7 @@ int main() {
 	fputc('\n',stdout);
 	displayHEAPdebug(t, stdout);
 	fputc('\n',stdout);
-	insertHEAP(t, x); //SEGFAULT
+	insertHEAP(t, x);
 	displayHEAP(t, stdout);
 	fputc('\n',stdout);
 	displayHEAPdebug(t, stdout);
@@ -49,6 +52,29 @@ int main() {
 	displayHEAP(t, stdout);
 	fputc('\n', stdout);
 	displayHEAPdebug(t, stdout);
+	fputc('\n', stdout);
+
+	displayINTEGER(peekHEAP(t), stdout);
+	fputc('\n', stdout);
+
+	x = extractHEAP(t);
+	displayINTEGER(x, stdout);
+	fputc('\n', stdout);
+	displayHEAP(t, stdout);
+	fputc('\n', stdout);
+	displayHEAPdebug(t, stdout);
+	fputc('\n', stdout);
+	freeINTEGER(x);
+
+	x = extractHEAP(t);
+	displayINTEGER(x, stdout);
+	fputc('\n', stdout);
+	displayHEAP(t, stdout);
+	fputc('\n', stdout);
+	displayHEAPdebug(t, stdout);
+	fputc('\n', stdout);
+
+	displayINTEGER(peekHEAP(t), stdout);
 	fputc('\n', stdout);
 
 	freeHEAP(t);
