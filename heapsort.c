@@ -63,11 +63,6 @@ int main(int argc, char **argv) {
 		}
 	}
 
-	FILE *fp = fopen(argv[argIndex], "r"); // open the file
-	while(!feof(fp)) {
-		insertHEAP(h, reader(fp)); // read values into the heap
-	}
-
 	int firstValue = 1;
 	void *value;
 	while(sizeHEAP(h) > 0) {
