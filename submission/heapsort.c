@@ -41,7 +41,7 @@ int main(int argc, char **argv) {
 	if(sortReals) {
 		release = freeREAL;
 		display = displayREAL;
-		compare = sortDecreasing ? compareREAL : rcompareREAL; // use a min-heap for increasing and a max-heap for decreasing to simplify display
+		compare = sortDecreasing ? rcompareREAL : compareREAL; // use a max-heap for decreasing to simplify display
 		h = newHEAP(display, compare, release);
 		while(!feof(fp)) {
 			insertHEAP(h, newREAL(readReal(fp)));
@@ -51,7 +51,7 @@ int main(int argc, char **argv) {
 	else if(sortStrings) {
 		release = freeSTRING;
 		display = displaySTRING;
-		compare = sortDecreasing ? compareSTRING : rcompareSTRING;
+		compare = sortDecreasing ? rcompareSTRING : compareSTRING;
 		h = newHEAP(display, compare, release);
 		while(!feof(fp)) {
 			insertHEAP(h, newSTRING(readStringOrToken(fp)));
@@ -61,7 +61,7 @@ int main(int argc, char **argv) {
 	else {
 		release = freeINTEGER;
 		display = displayINTEGER;
-		compare = sortDecreasing ? compareINTEGER : rcompareINTEGER;
+		compare = sortDecreasing ? rcompareINTEGER : compareINTEGER;
 		h = newHEAP(display, compare, release);
 		while(!feof(fp)) {
 			insertHEAP(h, newINTEGER(readInt(fp)));
