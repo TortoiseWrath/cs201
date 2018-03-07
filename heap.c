@@ -34,52 +34,52 @@ HEAP *newHEAP(
 //insert without heapifying
 void insertHEAP(HEAP *h, void *value) {
 	BSTNODE *node = newBSTNODE(value);
-	printf("parent is %p\n", getBSTNODEparent(node));
+	// printf("parent is %p\n", getBSTNODEparent(node));
 	setBSTNODEparent(node, NULL);
 	setBSTNODEleft(node, NULL);
 	setBSTNODEright(node, NULL);
-	assert(getBSTNODEparent(node) == NULL);
+	/* assert(getBSTNODEparent(node) == NULL);
 	assert(getBSTNODEleft(node) == NULL);
-	assert(getBSTNODEright(node) == NULL);
+	assert(getBSTNODEright(node) == NULL); */
 	BST *t = h->tree;
-	printf("tree has size %i\n",sizeBST(t));
+	// printf("tree has size %i\n",sizeBST(t));
 	if(sizeBST(t) == 0) {
 		// Create the root
 		setBSTroot(t, node);
-		printf("created root %p\n", node);
+		// printf("created root %p\n", node);
 	}
 	else {
 		BSTNODE *last = peekSTACK(h->nodestack);
 		assert(last != NULL);
-		printf("last node is %p\n",last);
+		// printf("last node is %p\n",last);
 
 		if(getBSTNODEparent(last) != NULL && getBSTNODEleft(getBSTNODEparent(last)) == last) {
-			printf("last node is a left child of %p\n",getBSTNODEparent(last));
+			// printf("last node is a left child of %p\n",getBSTNODEparent(last));
 			// Last node is a left child
 			last = getBSTNODEparent(last);
-			printf("%p is the right child of %p now\n",node,last);
+			// printf("%p is the right child of %p now\n",node,last);
 			setBSTNODEparent(node, last);
 			setBSTNODEright(last, node);
 		}
 		else {
 			while(getBSTNODEparent(last) != NULL && getBSTNODEright(getBSTNODEparent(last)) == last) {
 				// Go up until not right child
-				printf("%p is a right child\n",last);
+				// printf("%p is a right child\n",last);
 				last = getBSTNODEparent(last);
 			}
-			printf("%p is not a right child\n",last);
+			// printf("%p is not a right child\n",last);
 			if(getBSTNODEparent(last) != NULL) {
 				// Did not reach root: go to right sibling
-				printf("%p has sibling %p\n",last,getBSTNODEright(getBSTNODEparent(last)));
+				// printf("%p has sibling %p\n",last,getBSTNODEright(getBSTNODEparent(last)));
 				last = getBSTNODEright(getBSTNODEparent(last));
 				assert(last != NULL); // right sibling must exist
 			}
 			while(getBSTNODEleft(last) != NULL) {
 				// Go down left side
-				printf("%p is on the left of %p\n",getBSTNODEleft(last),last);
+				// printf("%p is on the left of %p\n",getBSTNODEleft(last),last);
 				last = getBSTNODEleft(last);
 			}
-			printf("%p is the left child of %p now\n",node,last);
+			// printf("%p is the left child of %p now\n",node,last);
 			setBSTNODEparent(node, last);
 			setBSTNODEleft(last, node);
 		}
