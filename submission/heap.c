@@ -23,7 +23,7 @@ HEAP *newHEAP(
 ) {
 	HEAP *h = malloc(sizeof(HEAP));
 	assert(h != NULL);
-	h->tree = newBST(d, NULL, NULL, f); //use generic swapper
+	h->tree = newBST(d, c, NULL, f); //use generic swapper
 	h->display = d;
 	h->compare = c;
 	h->f = f;
@@ -33,55 +33,59 @@ HEAP *newHEAP(
 
 //insert without heapifying
 void insertHEAP(HEAP *h, void *value) {
-	BST *t = h->tree; // for convenience
-
 	BSTNODE *node = newBSTNODE(value);
-
-	if(sizeBST(t) == 0) { // currently empty
+	setBSTNODEparent(node, NULL);
+	setBSTNODEleft(node, NULL);
+	setBSTNODEright(node, NULL);
+	assert(getBSTNODEparent(node) == NULL);
+	assert(getBSTNODEleft(node) == NULL);
+	assert(getBSTNODEright(node) == NULL);
+	BST *t = h->tree;
+	printf("tree has size %i\n",sizeBST(t));
+	if(sizeBST(t) == 0) {
+		// Create the root
 		setBSTroot(t, node);
-		setBSTsize(t, 1);
-	}
-	else if(sizeBST(t) == 1) { // insert left of root
-		setBSTNODEleft(getBSTroot(t), node);
-		setBSTNODEparent(node, getBSTroot(t));
-		setBSTsize(t, 2);
+		printf("created root %p\n", node);
 	}
 	else {
-		BSTNODE *last = peekSTACK(h->nodestack); // get the last node we added (the rightmost leaf)
-		BSTNODE *parent = getBSTNODEparent(last); // get the parent of that node
-		if(getBSTNODEright(parent) == NULL) { // if the last node has no sibling
-			setBSTNODEright(parent, node);
-			setBSTNODEparent(node, parent);
-		}
-		else if(sizeBST(t) == 3) { //add a third level
-			setBSTNODEleft(getBSTNODEleft(parent), node);
-			setBSTNODEparent(node, getBSTNODEleft(parent));
-		}
-		else { // check the parent node's sibling for empty children
-			BSTNODE *uncle = getBSTNODEright(getBSTNODEparent(parent));
-			if(getBSTNODEleft(uncle) == NULL) {
-				setBSTNODEleft(uncle, node);
-				setBSTNODEparent(node, uncle);
-			}
-			else if(getBSTNODEright(uncle) == NULL) {
-				setBSTNODEright(uncle, node);
-				setBSTNODEparent(node, uncle);
-			}
-			else { // add a new level to the tree
-				BSTNODE *cur = getBSTroot(t);
-				while (getBSTNODEleft(cur) != NULL) { // go down the left side of the tree
-					cur = getBSTNODEleft(cur);
-				}
-				//cur is now the leftmost leaf
-				setBSTNODEleft(cur, node);
-				setBSTNODEparent(node, cur);
-			}
-		}
+		BSTNODE *last = peekSTACK(h->nodestack);
+		assert(last != NULL);
+		printf("last node is %p\n",last);
 
-		setBSTsize(t, sizeBST(t) + 1); // increment the size
+		if(getBSTNODEparent(last) != NULL && getBSTNODEleft(getBSTNODEparent(last)) == last) {
+			printf("last node is a left child of %p\n",getBSTNODEparent(last));
+			// Last node is a left child
+			last = getBSTNODEparent(last);
+			printf("%p is the right child of %p now\n",node,last);
+			setBSTNODEparent(node, last);
+			setBSTNODEright(last, node);
+		}
+		else {
+			while(getBSTNODEparent(last) != NULL && getBSTNODEright(getBSTNODEparent(last)) == last) {
+				// Go up until not right child
+				printf("%p is a right child\n",last);
+				last = getBSTNODEparent(last);
+			}
+			printf("%p is not a right child\n",last);
+			if(getBSTNODEparent(last) != NULL) {
+				// Did not reach root: go to right sibling
+				printf("%p has sibling %p\n",last,getBSTNODEright(getBSTNODEparent(last)));
+				last = getBSTNODEright(getBSTNODEparent(last));
+				assert(last != NULL); // right sibling must exist
+			}
+			while(getBSTNODEleft(last) != NULL) {
+				// Go down left side
+				printf("%p is on the left of %p\n",getBSTNODEleft(last),last);
+				last = getBSTNODEleft(last);
+			}
+			printf("%p is the left child of %p now\n",node,last);
+			setBSTNODEparent(node, last);
+			setBSTNODEleft(last, node);
+		}
 	}
 
-	push(h->nodestack, node); // put the node on the stack
+	setBSTsize(t, sizeBST(t) + 1);
+	push(h->nodestack, node);
 }
 
 // builds a min-heap
