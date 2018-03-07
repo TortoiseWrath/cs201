@@ -23,7 +23,7 @@ HEAP *newHEAP(
 ) {
 	HEAP *h = malloc(sizeof(HEAP));
 	assert(h != NULL);
-	h->tree = newBST(d, NULL, NULL, f); //use generic swapper
+	h->tree = newBST(d, c, NULL, f); //use generic swapper
 	h->display = d;
 	h->compare = c;
 	h->f = f;
@@ -33,55 +33,42 @@ HEAP *newHEAP(
 
 //insert without heapifying
 void insertHEAP(HEAP *h, void *value) {
-	BST *t = h->tree; // for convenience
-
 	BSTNODE *node = newBSTNODE(value);
-
-	if(sizeBST(t) == 0) { // currently empty
+	BST *t = h->tree;
+	if(sizeBST(t) == 0) {
+		// Create the root
 		setBSTroot(t, node);
-		setBSTsize(t, 1);
-	}
-	else if(sizeBST(t) == 1) { // insert left of root
-		setBSTNODEleft(getBSTroot(t), node);
-		setBSTNODEparent(node, getBSTroot(t));
-		setBSTsize(t, 2);
 	}
 	else {
-		BSTNODE *last = peekSTACK(h->nodestack); // get the last node we added (the rightmost leaf)
-		BSTNODE *parent = getBSTNODEparent(last); // get the parent of that node
-		if(getBSTNODEright(parent) == NULL) { // if the last node has no sibling
-			setBSTNODEright(parent, node);
-			setBSTNODEparent(node, parent);
-		}
-		else if(sizeBST(t) == 3) { //add a third level
-			setBSTNODEleft(getBSTNODEleft(parent), node);
-			setBSTNODEparent(node, getBSTNODEleft(parent));
-		}
-		else { // check the parent node's sibling for empty children
-			BSTNODE *uncle = getBSTNODEright(getBSTNODEparent(parent));
-			if(getBSTNODEleft(uncle) == NULL) {
-				setBSTNODEleft(uncle, node);
-				setBSTNODEparent(node, uncle);
-			}
-			else if(getBSTNODEright(uncle) == NULL) {
-				setBSTNODEright(uncle, node);
-				setBSTNODEparent(node, uncle);
-			}
-			else { // add a new level to the tree
-				BSTNODE *cur = getBSTroot(t);
-				while (getBSTNODEleft(cur) != NULL) { // go down the left side of the tree
-					cur = getBSTNODEleft(cur);
-				}
-				//cur is now the leftmost leaf
-				setBSTNODEleft(cur, node);
-				setBSTNODEparent(node, cur);
-			}
-		}
+		BSTNODE *last = peekSTACK(h->nodestack);
 
-		setBSTsize(t, sizeBST(t) + 1); // increment the size
+		if(getBSTNODEparent(last) != NULL && getBSTNODEleft(getBSTNODEparent(last)) == last) {
+			// Last node is a left child
+			last = getBSTNODEparent(last);
+			setBSTNODEparent(node, last);
+			setBSTNODEright(last, node);
+		}
+		else {
+			while(getBSTNODEparent(last) != NULL && getBSTNODEright(getBSTNODEparent(last)) == last) {
+				// Go up until not right child
+				last = getBSTNODEparent(last);
+			}
+			if(getBSTNODEparent(last) != NULL) {
+				// Did not reach root: go to right sibling
+				last = getBSTNODEright(getBSTNODEparent(last));
+				assert(last != NULL); // right sibling must exist
+			}
+			while(getBSTNODEleft(last) != NULL) {
+				// Go down left side
+				last = getBSTNODEleft(last);
+			}
+			setBSTNODEparent(node, last);
+			setBSTNODEleft(last, node);
+		}
 	}
 
-	push(h->nodestack, node); // put the node on the stack
+	setBSTsize(t, sizeBST(t) + 1);
+	push(h->nodestack, node);
 }
 
 // builds a min-heap

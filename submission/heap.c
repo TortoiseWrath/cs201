@@ -84,7 +84,7 @@ void insertHEAP(HEAP *h, void *value) {
 	push(h->nodestack, node); // put the node on the stack
 }
 
-// builds a max-heap
+// builds a min-heap
 void buildHEAP(HEAP *h) {
 	// Algorithm: Cormen et al. 157
 	assert(h->nodestack != NULL);
@@ -110,13 +110,13 @@ static void heapify(HEAP *h, BSTNODE *i) {
 	BSTNODE *l = getBSTNODEleft(i);
 	BSTNODE *r = getBSTNODEright(i);
 	BSTNODE *largest;
-	if(l != NULL && h->compare(getBSTNODEvalue(l), getBSTNODEvalue(i)) > 0) {
+	if(l != NULL && h->compare(getBSTNODEvalue(l), getBSTNODEvalue(i)) < 0) {
 		largest = l;
 	}
 	else {
 		largest = i;
 	}
-	if(r != NULL && h->compare(getBSTNODEvalue(r), getBSTNODEvalue(largest)) > 0) {
+	if(r != NULL && h->compare(getBSTNODEvalue(r), getBSTNODEvalue(largest)) < 0) {
 		largest = r;
 	}
 	if(largest != i) {
