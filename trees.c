@@ -183,12 +183,30 @@ static void insertNonEmptyAVL(AVL *tree, STRING *word) {
 }
 
 static void *deleteNonEmptyGST(GST *tree, STRING *word) {
-	if(nonempty(word)) return deleteGST(tree, word);
+	if(nonempty(word)) {
+		if(findGST(tree, word) == NULL) {
+			/* Error - does not exist in tree */
+			fputs("Value ", stdout);
+			displaySTRING(word, stdout);
+			fputs(" not found.\n", stdout);
+			return NULL;
+		}
+		return deleteGST(tree, word);
+	}
 	return NULL;
 }
 
 static void *deleteNonEmptyAVL(AVL *tree, STRING *word) {
-	if(nonempty(word)) return deleteAVL(tree, word);
+	if(nonempty(word)) {
+		if(findAVL(tree, word) == NULL) {
+			/* Error - does not exist in tree */
+			fputs("Value ", stdout);
+			displaySTRING(word, stdout);
+			fputs(" not found.\n", stdout);
+			return NULL;
+		}
+		return deleteAVL(tree, word);
+	}
 	return NULL;
 }
 
