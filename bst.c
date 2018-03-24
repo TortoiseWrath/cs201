@@ -164,37 +164,77 @@ BSTNODE *findBST(BST *t, void *value) {
 }
 
 BSTNODE *deleteBST(BST *t, void *value) {
+	/* displayBSTdecorated(t, stdout);
+	 printf("Deleting ");
+	t->display(value,stdout);
+	printf("\n"); */
 	BSTNODE *x = findBST(t, value);
 	x = swapToLeafBST(t, x);
+	// displayBSTdecorated(t, stdout);
 	pruneLeafBST(t, x);
 	setBSTsize(t, sizeBST(t) - 1); // decrement tree size
+	/* printf("Deleted ");
+	t->display(getBSTNODEvalue(x),stdout);
+	printf("\n");
+	displayBSTdecorated(t, stdout);*/
 	return x;
 }
+
+static BSTNODE *successorBST(BSTNODE *n);
+static BSTNODE *predecessorBST(BSTNODE *n);
 
 BSTNODE *swapToLeafBST(BST *t, BSTNODE *node) {
 	if(node == NULL || (getBSTNODEleft(node) == NULL && getBSTNODEright(node) == NULL)) {
 		return node;
 	}
 
-	if(getBSTNODEright(node) == NULL) {
-		// No successor: find predecessor
-		BSTNODE *x = getBSTNODEleft(node);
-		while(getBSTNODEright(x) != NULL) {
-			x = getBSTNODEright(x);
-		}
-		// x is predecessor
-		t->swapper(node, x); // swap VALUES, not nodes
-		return swapToLeafBST(t, x);
+	BSTNODE *x = successorBST(node);
+
+	if(getBSTNODEright(node) == NULL || x == NULL) { // Only go down.
+		// Swap to predecessor
+		x = predecessorBST(node);
 	}
 
-	// Find successor
-	BSTNODE *x = getBSTNODEright(node);
-	while(getBSTNODEleft(x) != NULL) {
-		x = getBSTNODEleft(x);
-	}
-	// x is successor
-	t->swapper(node, x); // swap VALUES, not nodes
+	t->swapper(node, x);
 	return swapToLeafBST(t, x);
+}
+
+BSTNODE *successorBST(BSTNODE *node) {
+	BSTNODE *n = node;
+	if(getBSTNODEright(n) != NULL) {
+		// Minimum value of right subtree
+		n = getBSTNODEright(n);
+		while(getBSTNODEleft(n) != NULL) {
+			n = getBSTNODEleft(n);
+		}
+		return n;
+	}
+
+	BSTNODE *p = getBSTNODEparent(n);
+	while(p != NULL && p != n && getBSTNODEright(p) == n) {
+		n = p;
+		p = getBSTNODEparent(p);
+	}
+	return (p == n )? NULL : p;
+}
+
+BSTNODE *predecessorBST(BSTNODE *node) {
+	BSTNODE *n = node;
+	if(getBSTNODEleft(n) != NULL) {
+		// Maximum value of left subtree
+		n = getBSTNODEleft(n);
+		while(getBSTNODEright(n) != NULL) {
+			n = getBSTNODEright(n);
+		}
+		return n;
+	}
+
+	BSTNODE *p = getBSTNODEparent(n);
+	while(p != NULL && p != n && getBSTNODEleft(p) == n) {
+		n = p;
+		p = getBSTNODEparent(p);
+	}
+	return p == n ? NULL : p;
 }
 
 void pruneLeafBST(BST *t, BSTNODE *leaf) {
@@ -266,7 +306,6 @@ static void displaySubtree(BSTNODE *root, FILE *fp, void (*display)(void *, FILE
 
 static void displayBSTlevelorder(BST *t, FILE *fp, int decorated) {
 	if(sizeBST(t) == 0) {
-		if(decorated) fputs("EMPTY\n", fp);
 		return;
 	}
 	QUEUE *q1 = newQUEUE(NULL, NULL);
@@ -286,7 +325,7 @@ static void displayBSTlevelorder(BST *t, FILE *fp, int decorated) {
 			}
 			t->display(getBSTNODEvalue(n), fp); // display the node value
 			fputc('(', fp);
-			if(getBSTNODEparent(n) == NULL) { // is root
+			if(getBSTNODEparent(n) == NULL || getBSTNODEparent(n) == n) { // is root
 				t->display(getBSTNODEvalue(n), fp);
 				fputs(")X", fp);
 			}

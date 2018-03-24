@@ -8,10 +8,11 @@ GST:
 debug: [2]
 is 2 present? yes
 GST:
+EMPTY
 debug: []
 is 2 present? no
-size: 2
-Duplicates: 2
+size: 0
+Duplicates: 0
 Nodes: 0
 Minimum depth: -1
 Maximum depth: -1
