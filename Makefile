@@ -2,8 +2,8 @@ OBJS = bst.o queue.o sll.o integer.o
 OOPTS = -Wall -Wextra -g -c -std=c99
 LOPTS = -Wall -Wextra -g -std=c99
 
-all : tests
-tests : test-gst test-avl
+all : tests trees
+tests : test-bst test-gst test-avl
 
 test-bst : test-bst.c bst.o queue.o sll.o integer.o
 	gcc $(LOPTS) test-bst.c bst.o queue.o sll.o integer.o -o test-bst
@@ -13,6 +13,9 @@ test-gst : test-gst.c gst.o bst.o queue.o sll.o integer.o
 
 test-avl : test-avl.c avl.o bst.o queue.o sll.o integer.o
 	gcc $(LOPTS) test-avl.c avl.o bst.o queue.o sll.o integer.o -o test-avl
+
+trees : trees.c scanner.o gst.o avl.o bst.o queue.o sll.o string.o
+	gcc $(LOPTS) trees.c scanner.o gst.o avl.o bst.o queue.o sll.o string.o -o trees
 
 
 gst.o: gst.c gst.h bst.o
@@ -52,18 +55,34 @@ scanner.o : scanner.c scanner.h
 	gcc $(OOPTS) scanner.c
 
 valgrind  : all
+	echo testing BST
+	valgrind ./test-bst
 	echo testing GST
 	valgrind ./test-gst
 	echo testing AVL
 	valgrind ./test-avl
+	echo testing trees -g
+	valgrind ./trees -g test-corpus test-commands
+	echo testing trees -r
+	valgrind ./trees -r test-corpus test-commands
+	echo testing trees -v
+	valgrind ./trees -v test-corpus test-commands
 	echo
 
 test : all
+	echo testing BST
+	./test-bst
 	echo testing GST
 	./test-gst
 	echo testing AVL
 	./test-avl
+	echo testing trees -g
+	./trees -g test-corpus test-commands
+	echo testing trees -r
+	./trees -r test-corpus test-commands
+	echo testing trees -v
+	./trees -v test-corpus test-commands
 	echo
 
 clean    :
-	rm -f $(OBJS) *.o test-gst
+	rm -f $(OBJS) *.o test-bst test-gst test-avl trees

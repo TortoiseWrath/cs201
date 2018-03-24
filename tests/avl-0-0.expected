@@ -20,6 +20,7 @@ Nodes: 0
 Minimum depth: -1
 Maximum depth: -1
 AVL:
+EMPTY
 debug: []
 is 2 present? no
 size: 0

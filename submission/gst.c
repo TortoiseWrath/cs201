@@ -48,6 +48,7 @@ void insertGST(GST *tree, void *value) {
 		// Increment frequency of existing value
 		GSTVALUE *gstval = getBSTNODEvalue(n);
 		setGSTVALUEfrequency(gstval, frequencyGSTVALUE(gstval) + 1);
+		// Newly-passed value must be freed by calling function.
 		return;
 	}
 	// Insert new value into BST
@@ -76,9 +77,9 @@ void *deleteGST(GST *tree, void *value) {
 	BSTNODE *n = findGSTNODE(tree, value);
 	if(n == NULL) {
 		/* Error - does not exist in tree */
-		puts("Value ");
+		fputs("Value ", stdout);
 		tree->display(value, stdout);
-		puts(" not found.");
+		fputs(" not found.\n", stdout);
 		return NULL;
 	}
 	GSTVALUE *gstval = getBSTNODEvalue(n);
@@ -111,6 +112,10 @@ void statisticsGST(GST *tree, FILE *fp) {
 }
 
 void displayGST(GST *tree, FILE *fp) {
+	if(sizeGST(tree) == 0) {
+		fputs("EMPTY\n", fp);
+		return;
+	}
 	displayBSTdecorated(tree->bst, fp);
 	return;
 }
@@ -158,7 +163,7 @@ static void freeGSTVALUE(void /*GSTVALUE*/ *v) {
 }
 
 static GSTVALUE *newGSTVALUE(void *value, void (*d)(void *, FILE *), int (*c)(void *, void *), void (*f)(void *)) {
-	GSTVALUE *gstval = malloc(sizeof(GST));
+	GSTVALUE *gstval = malloc(sizeof(GSTVALUE));
 	assert(gstval != NULL);
 	gstval->value = value;
 	setGSTVALUEfrequency(gstval, 1);
