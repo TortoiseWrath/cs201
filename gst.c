@@ -76,10 +76,6 @@ void *findGST(GST *tree, void *value) {
 void *deleteGST(GST *tree, void *value) {
 	BSTNODE *n = findGSTNODE(tree, value);
 	if(n == NULL) {
-		/* Error - does not exist in tree */
-		fputs("Value ", stdout);
-		tree->display(value, stdout);
-		fputs(" not found.\n", stdout);
 		return NULL;
 	}
 	GSTVALUE *gstval = getBSTNODEvalue(n);

@@ -164,24 +164,24 @@ BSTNODE *findBST(BST *t, void *value) {
 }
 
 BSTNODE *deleteBST(BST *t, void *value) {
-	/* printf("Deleting ");
+	/* displayBSTdecorated(t, stdout);
+	 printf("Deleting ");
 	t->display(value,stdout);
 	printf("\n"); */
 	BSTNODE *x = findBST(t, value);
 	x = swapToLeafBST(t, x);
+	// displayBSTdecorated(t, stdout);
 	pruneLeafBST(t, x);
 	setBSTsize(t, sizeBST(t) - 1); // decrement tree size
 	/* printf("Deleted ");
 	t->display(getBSTNODEvalue(x),stdout);
 	printf("\n");
-	displayBSTdecorated(t, stdout); */
+	displayBSTdecorated(t, stdout);*/
 	return x;
 }
 
 static BSTNODE *successorBST(BSTNODE *n);
 static BSTNODE *predecessorBST(BSTNODE *n);
-static BSTNODE *swaptoPredecessorBST(BST *t, BSTNODE *n);
-static BSTNODE *swaptoSuccessorBST(BST *t, BSTNODE *n);
 
 BSTNODE *swapToLeafBST(BST *t, BSTNODE *node) {
 	if(node == NULL || (getBSTNODEleft(node) == NULL && getBSTNODEright(node) == NULL)) {
@@ -189,43 +189,14 @@ BSTNODE *swapToLeafBST(BST *t, BSTNODE *node) {
 	}
 
 	BSTNODE *x = successorBST(node);
-	if(x == NULL) {
+
+	if(getBSTNODEright(node) == NULL || x == NULL) { // Only go down.
+		// Swap to predecessor
 		x = predecessorBST(node);
-		t->swapper(node, x); // swap VALUES, not nodes
-		return swaptoPredecessorBST(t, x);
-	}
-	else {
-	t->swapper(node, x); // swap VALUES, not nodes
-		return swaptoSuccessorBST(t, x);
-	}
-}
-
-BSTNODE *swaptoPredecessorBST(BST *t, BSTNODE *node) {
-	if(node == NULL || (getBSTNODEleft(node) == NULL && getBSTNODEright(node) == NULL)) {
-		return node;
 	}
 
-	BSTNODE *x = predecessorBST(node);
-	if(x == NULL) {
-		return swapToLeafBST(t, x);
-	}
-	// printf("Swapping %p to leaf; predecessor is %p\n", node, x);
 	t->swapper(node, x);
-	return swaptoPredecessorBST(t, x);
-}
-
-BSTNODE *swaptoSuccessorBST(BST *t, BSTNODE *node) {
-	if(node == NULL || (getBSTNODEleft(node) == NULL && getBSTNODEright(node) == NULL)) {
-		return node;
-	}
-
-	BSTNODE *x = successorBST(node);
-	if(x == NULL) {
-		return swapToLeafBST(t, x);
-	}
-	// printf("Swapping %p to leaf; successor is %p\n", node, x);
-	t->swapper(node, x);
-	return swaptoSuccessorBST(t, x);
+	return swapToLeafBST(t, x);
 }
 
 BSTNODE *successorBST(BSTNODE *node) {

@@ -213,10 +213,6 @@ void *findAVL(AVL *tree, void *value) {
 void *deleteAVL(AVL *tree, void *value) {
 	BSTNODE *n = findAVLNODE(tree, value);
 	if(n == NULL) {
-		/* Error - does not exist in tree */
-		fputs("Value ", stdout);
-		tree->display(value, stdout);
-		fputs(" not found.\n", stdout);
 		return NULL;
 	}
 	AVLVALUE *avlval = getBSTNODEvalue(n);

@@ -54,6 +54,119 @@ AVL *newAVL(void (*d)(void *, FILE *), int (*c)(void *, void *), void (*f)(void 
 	return tree;
 }
 
+static void insertionFixUp(BSTNODE *x, BST *t) {
+	for(;;) {
+		if(getBSTNODEparent(x) == NULL || getBSTNODEparent(x) == x) {
+			// x is the root
+			break;
+		}
+		int position = 1 - 2*(getBSTNODEright(getBSTNODEparent(x)) == x);
+			// x is left child: position = 1
+			// x is right child: position = -1
+		if(balanceAVLVALUE(getBSTNODEvalue(getBSTNODEparent(x))) == -1 * position) {
+			// parent favors the sibling - case 1
+			setAVLVALUEbalance(getBSTNODEparent(x));
+			break;
+		}
+		else if(balanceAVLVALUE(getBSTNODEvalue(getBSTNODEparent(x))) == 0) {
+			// parent has no favorite - case 2
+			setAVLVALUEbalance(getBSTNODEparent(x));
+			x = getBSTNODEparent(x);
+			continue;
+		}
+		else {
+			// parent favors x
+			assert(balanceAVLVALUE(getBSTNODEvalue(getBSTNODEparent(x))) == position);
+			BSTNODE *y = NULL;
+			if(balanceAVLVALUE(getBSTNODEvalue(x)) == 1) {
+				// left child is the favorite
+				y = getBSTNODEleft(x);
+			}
+			else if(balanceAVLVALUE(getBSTNODEvalue(x)) == -1) {
+				// right child is the favorite
+				y = getBSTNODEright(x);
+			}
+			BSTNODE *p = getBSTNODEparent(x);
+			if(y != NULL && !AVLlinear(y, x, p)) {
+				// case 3
+				AVLrotate(y, x, t);
+				AVLrotate(y, p, t);
+				setAVLVALUEbalance(x);
+				setAVLVALUEbalance(p);
+				setAVLVALUEbalance(y);
+			}
+			else {
+				AVLrotate(x, p, t);
+				setAVLVALUEbalance(p);
+				setAVLVALUEbalance(x);
+			}
+			break;
+		}
+	}
+	return;
+}
+
+static void deletionFixUp(BSTNODE *x, BST *t) {
+	setAVLVALUEheight(getBSTNODEvalue(x), 0);
+	for(;;) {
+		if(getBSTNODEparent(x) == NULL || getBSTNODEparent(x) == x) {
+			// x is the root
+			break;
+		}
+		int position = 1 - 2*(getBSTNODEright(getBSTNODEparent(x)) == x);
+			// x is left child: position = 1
+			// x is right child: position = -1
+		if(balanceAVLVALUE(getBSTNODEvalue(getBSTNODEparent(x))) == position) {
+			// parent favors x - case 1
+			setAVLVALUEbalance(getBSTNODEparent(x));
+			x = getBSTNODEparent(x);
+			continue;
+		}
+		else if(balanceAVLVALUE(getBSTNODEvalue(getBSTNODEparent(x))) == 0) {
+			// parent has no favorite - case 2
+			setAVLVALUEbalance(getBSTNODEparent(x));
+			break;
+		}
+		else {
+			// parent favors sibling
+			assert(balanceAVLVALUE(getBSTNODEvalue(getBSTNODEparent(x))) == -1 * position);
+			BSTNODE *p = getBSTNODEparent(x);
+			BSTNODE *z = getBSTNODEleft(getBSTNODEparent(x));
+			if(z == x) z = getBSTNODEright(getBSTNODEparent(x)); // z = sibling
+			BSTNODE *y = NULL;
+			if(balanceAVLVALUE(getBSTNODEvalue(z)) == 1) {
+				// left child is the favorite
+				y = getBSTNODEleft(z);
+			}
+			else if(balanceAVLVALUE(getBSTNODEvalue(z)) == -1) {
+				// right child is the favorite
+				y = getBSTNODEright(z);
+			}
+			if(y != NULL && !AVLlinear(y, z, p)) {
+				// case 3
+				AVLrotate(y, z, t);
+				AVLrotate(y, p, t);
+				setAVLVALUEbalance(p);
+				setAVLVALUEbalance(z);
+				setAVLVALUEbalance(y);
+				x = y;
+				continue;
+			}
+			else {
+				// case 4
+				AVLrotate(z, p, t);
+				setAVLVALUEbalance(p);
+				setAVLVALUEbalance(z);
+				if(y == NULL) {
+					break;
+				}
+				x = z;
+				continue;
+			}
+		}
+	}
+}
+
 void insertAVL(AVL *tree, void *value) {
 	tree->netInsertions++;
 	BSTNODE *n = findAVLNODE(tree, value);
@@ -73,49 +186,12 @@ void insertAVL(AVL *tree, void *value) {
 
 	// Set the balance of the newly inserted node
 	setAVLVALUEbalance(x);
+	assert(leftheightAVLVALUE(getBSTNODEvalue(x)) == 0);
+	assert(rightheightAVLVALUE(getBSTNODEvalue(x)) == 0);
+	assert(heightAVLVALUE(getBSTNODEvalue(x)) == 1);
 
-	// Insertion Fix Up
-	for(;;) {
-		if(getBSTNODEparent(x) == NULL || getBSTNODEparent(x) == x) { // x is the root
-			return;
-		}
-		int position = 1 - 2*(getBSTNODEright(getBSTNODEparent(x)) == x);
-			// x is left child: position = 1
-			// x is right child: position = -1
-		if(balanceAVLVALUE(getBSTNODEvalue(getBSTNODEparent(x))) == -1 * position) {
-			// parent favors the sibling - case 1
-			setAVLVALUEbalance(getBSTNODEparent(x));
-			return;
-		}
-		else if(balanceAVLVALUE(getBSTNODEvalue(getBSTNODEparent(x))) == 0) {
-			// parent is balanced - case 2
-			setAVLVALUEbalance(getBSTNODEparent(x));
-			x = getBSTNODEparent(x);
-		}
-		else {
-			BSTNODE *y = getBSTNODEright(x);
-			if(balanceAVLVALUE(getBSTNODEvalue(x)) == 1) {
-				// left child is the favorite
-				y = getBSTNODEleft(x);
-			}
-			BSTNODE *p = getBSTNODEparent(x);
-			if(y != NULL && !AVLlinear(y, x, p)) {
-				// case 3
-				AVLrotate(y, x, tree->bst);
-				AVLrotate(y, p, tree->bst);
-				setAVLVALUEbalance(x);
-				setAVLVALUEbalance(p);
-				setAVLVALUEbalance(y);
-			}
-			else {
-				// case 4
-				AVLrotate(x, p, tree->bst);
-				setAVLVALUEbalance(p);
-				setAVLVALUEbalance(x);
-			}
-			return;
-		}
-	}
+	insertionFixUp(x, tree->bst);
+	return;
 }
 
 int findAVLcount(AVL *tree, void *value) {
@@ -137,10 +213,6 @@ void *findAVL(AVL *tree, void *value) {
 void *deleteAVL(AVL *tree, void *value) {
 	BSTNODE *n = findAVLNODE(tree, value);
 	if(n == NULL) {
-		/* Error - does not exist in tree */
-		fputs("Value ", stdout);
-		tree->display(value, stdout);
-		fputs(" not found.\n", stdout);
 		return NULL;
 	}
 	AVLVALUE *avlval = getBSTNODEvalue(n);
@@ -152,70 +224,14 @@ void *deleteAVL(AVL *tree, void *value) {
 	}
 
 	// Based on http://beastie.cs.ua.edu/avl/delete-avl.html
-	n = swapToLeafBST(tree->bst, n);
-	BSTNODE *x = n;
-
-	// Deletion Fix Up
-	setAVLVALUEheight(getBSTNODEvalue(x), 0);
-	for(;;) {
-		if(getBSTNODEparent(x) == NULL || getBSTNODEparent(x) == x) {
-			// x is the root
-			break;
-		}
-		int position = 1 - 2*(getBSTNODEright(getBSTNODEparent(x)) == x);
-			// x is left child: position = 1
-			// x is right child: position = -1
-		assert(position == 1 || position == -1);
-		if(balanceAVLVALUE(getBSTNODEvalue(getBSTNODEparent(x))) == position) {
-			// parent favors x - case 1
-			setAVLVALUEbalance(getBSTNODEparent(x));
-			x = getBSTNODEparent(x);
-		}
-		else if(balanceAVLVALUE(getBSTNODEvalue(getBSTNODEparent(x))) == 0) {
-			// parent has no favorite - case 2
-			setAVLVALUEbalance(getBSTNODEparent(x));
-			break;
-		}
-		else {
-			/* printf("node %p: value = ",x);
-			tree->display(valueAVLVALUE(getBSTNODEvalue(x)), stdout);
-			printf(", parent %p: value = \n",getBSTNODEparent(x));
-			tree->display(valueAVLVALUE(getBSTNODEvalue(getBSTNODEparent(x))),stdout);
-			printf("\n"); */
-			BSTNODE *p = getBSTNODEparent(x);
-			BSTNODE *z = getBSTNODEleft(p);
-			if(z == x) z = getBSTNODEright(p);
-			BSTNODE *y = getBSTNODEleft(z);
-			if(balanceAVLVALUE(getBSTNODEvalue(z)) == -1) {
-				y = getBSTNODEright(z);
-			}
-			if(y != NULL && !AVLlinear(y, z, p)) {
-				// case 3
-				AVLrotate(y, z, tree->bst);
-				AVLrotate(y, p, tree->bst);
-				setAVLVALUEbalance(p);
-				setAVLVALUEbalance(z);
-				setAVLVALUEbalance(y);
-				x = y;
-			}
-			else {
-				// case 4
-				AVLrotate(z, p, tree->bst);
-				setAVLVALUEbalance(p);
-				setAVLVALUEbalance(z);
-				if(y == NULL) {
-					break;
-				}
-				x = z;
-			}
-		}
-	}
+	BSTNODE *x = swapToLeafBST(tree->bst, n);
+	deletionFixUp(x, tree->bst);
 
 	// Prune
-	pruneLeafBST(tree->bst, n);
+	pruneLeafBST(tree->bst, x);
 	setBSTsize(tree->bst, sizeBST(tree->bst) - 1);
-	avlval = getBSTNODEvalue(n);
-	free(n);
+	avlval = getBSTNODEvalue(x);
+	free(x);
 	void *v = valueAVLVALUE(avlval);
 	free(avlval);
 	return v;
