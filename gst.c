@@ -109,7 +109,7 @@ void statisticsGST(GST *tree, FILE *fp) {
 
 void displayGST(GST *tree, FILE *fp) {
 	if(sizeGST(tree) == 0) {
-		fputs("EMPTY\n", fp);
+		// fputs("EMPTY\n", fp);
 		return;
 	}
 	displayBSTdecorated(tree->bst, fp);

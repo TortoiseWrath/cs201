@@ -71,7 +71,12 @@ static void processGST(char *corpus, char *commands) {
 				frequencyGST(tree, readWord(fp));
 				break;
 			case 's':
-				displayGST(tree, stdout);
+				if (sizeGST(tree) == 0) {
+					puts("EMPTY\n");
+				}
+				else {
+					displayGST(tree, stdout);
+				}
 				break;
 			case 'r':
 				statisticsGST(tree, stdout);
@@ -124,7 +129,12 @@ static void processAVL(char *corpus, char *commands) {
 				frequencyAVL(tree, readWord(fp));
 				break;
 			case 's':
-				displayAVL(tree, stdout);
+				if (sizeAVL(tree) == 0) {
+					puts("EMPTY\n");
+				}
+				else {
+					displayAVL(tree, stdout);
+				}
 				break;
 			case 'r':
 				statisticsAVL(tree, stdout);

@@ -253,7 +253,7 @@ void statisticsAVL(AVL *tree, FILE *fp) {
 
 void displayAVL(AVL *tree, FILE *fp) {
 	if(sizeAVL(tree) == 0) {
-		fputs("EMPTY\n", fp);
+		// fputs("EMPTY\n", fp);
 		return;
 	}
 	displayBSTdecorated(tree->bst, fp);
