@@ -233,6 +233,7 @@ static STRING *readWord(FILE *fp) {
 	while(token[a] != '\0') {
 		if(token[a] == 32 && !ignoreSpace) {
 			token[b] = 32;
+			ignoreSpace = 1; // to collapse sequences of spaces
 			b++;
 		}
 		else if(97 <= token[a] && token[a] <= 122) {

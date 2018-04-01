@@ -12,7 +12,7 @@ long int random(void);
 int
 main(void)
     {
-    srandom(42);
+    srandom(102);
     //simple REAL test of GST
     GST *p = newGST(displayREAL,compareREAL,freeREAL);
     insertGST(p,newREAL(3));

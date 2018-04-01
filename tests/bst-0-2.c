@@ -12,7 +12,7 @@ long int random(void);
 int
 main(void)
     {
-    srandom(43);
+    srandom(103);
     //simple STRING test of BST
     BST *p = newBST(displaySTRING,compareSTRING,0,freeSTRING);
     insertBST(p,newSTRING("a3"));

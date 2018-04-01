@@ -12,13 +12,13 @@ long int random(void);
 int
 main(void)
     {
-    srandom(44);
+    srandom(104);
     //simple INTEGER test of GST
     int i;
     GST *p = newGST(displayINTEGER,compareINTEGER,freeINTEGER);
-    for (i = 0; i < 19; ++i)
+    for (i = 0; i < 15; ++i)
         {
-        int j = random() % 19;
+        int j = random() % 15;
         INTEGER *a = newINTEGER(j);
         if (findGST(p,a) == 0)
             insertGST(p,a);

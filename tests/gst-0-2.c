@@ -12,7 +12,7 @@ long int random(void);
 int
 main(void)
     {
-    srandom(43);
+    srandom(103);
     //simple STRING test of GST
     GST *p = newGST(displaySTRING,compareSTRING,freeSTRING);
     insertGST(p,newSTRING("a3"));

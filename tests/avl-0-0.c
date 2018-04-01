@@ -13,11 +13,12 @@ long int random(void);
 int
 main(void)
     {
-    srandom(1);
+    srandom(101);
     //simple INTEGER test of AVL
     AVL *p = newAVL(displayINTEGER,compareINTEGER,freeINTEGER);
-    insertAVL(p,newINTEGER(3));
     insertAVL(p,newINTEGER(2));
+    insertAVL(p,newINTEGER(3));
+    insertAVL(p,newINTEGER(1));
     statisticsAVL(p,stdout);
     printf("AVL:\n");
     displayAVL(p,stdout);

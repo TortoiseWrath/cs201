@@ -12,7 +12,7 @@ long int random(void);
 int
 main(void)
     {
-    srandom(41);
+    srandom(101);
     //simple INTEGER test of BST
     BST *p = newBST(displayINTEGER,compareINTEGER,0,freeINTEGER);
     insertBST(p,newINTEGER(3));
