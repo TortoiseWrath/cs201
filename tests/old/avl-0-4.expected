@@ -1,0 +1,15 @@
+AVL:
+0: 1[3]-(1[3]-)X
+1: =0(1[3]-)L 8(1[3]-)R
+2: =5[4](8)L =9(8)R
+debug: [1[3]- [0] [8 [5[4]] [9]]]
+size is 5
+AVL:
+0: 5[4](5[4])X
+1: =1[3](5[4])L =9(5[4])R
+debug: [5[4] [1[3]] [9]]
+size is 3
+Duplicates: 5
+Nodes: 3
+Minimum depth: 1
+Maximum depth: 1

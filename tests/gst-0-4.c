@@ -12,13 +12,13 @@ long int random(void);
 int
 main(void)
     {
-    srandom(45);
+    srandom(105);
     //simple INTEGER test of GST
     int i;
     GST *p = newGST(displayINTEGER,compareINTEGER,freeINTEGER);
-    for (i = 0; i < 10; ++i)
+    for (i = 0; i < 13; ++i)
         {
-        int j = random() % 10;
+        int j = random() % 13;
         INTEGER *a = newINTEGER(j);
         if (findGST(p,a) == 0)
             insertGST(p,a);
@@ -34,9 +34,9 @@ main(void)
         printf("\n");
         }
     printf("size is %d\n",sizeGST(p));
-    for (i = 0; i < 10; ++i)
+    for (i = 0; i < 13; ++i)
         {
-        int j = random() % 10;
+        int j = random() % 13;
         INTEGER *a = newINTEGER(j);
         if (findGST(p,a) != 0)
             freeINTEGER(deleteGST(p,a));

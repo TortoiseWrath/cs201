@@ -12,7 +12,7 @@ long int random(void);
 int
 main(void)
     {
-    srandom(50);
+    srandom(110);
     //simple INTEGER test of GST
     int i;
     GST *p = newGST(displayINTEGER,compareINTEGER,freeINTEGER);

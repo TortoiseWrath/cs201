@@ -12,13 +12,13 @@ long int random(void);
 int
 main(void)
     {
-    srandom(45);
+    srandom(105);
     //simple INTEGER test of BST
     int i;
     BST *p = newBST(displayINTEGER,compareINTEGER,0,freeINTEGER);
-    for (i = 0; i < 10; ++i)
+    for (i = 0; i < 13; ++i)
         {
-        int j = random() % 10;
+        int j = random() % 13;
         INTEGER *a = newINTEGER(j);
         if (findBST(p,a) == 0)
             insertBST(p,a);
@@ -34,9 +34,9 @@ main(void)
         displayBSTdebug(p,stdout);
         }
     printf("size is %d\n",sizeBST(p));
-    for (i = 0; i < 10; ++i)
+    for (i = 0; i < 13; ++i)
         {
-        int j = random() % 10;
+        int j = random() % 13;
         INTEGER *a = newINTEGER(j);
         if (findBST(p,a) != 0)
             freeBSTNODE(deleteBST(p,a),freeINTEGER);

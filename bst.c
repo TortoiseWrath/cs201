@@ -68,6 +68,7 @@ BSTNODE *getBSTNODEparent(BSTNODE *n) {
 
 void setBSTNODEparent(BSTNODE *n, BSTNODE *replacement) {
 	n->parent = replacement;
+	if(replacement == NULL) n->parent = n;
 	return;
 }
 
@@ -136,6 +137,7 @@ BSTNODE *insertBST(BST *t, void *value) {
 	if(y == NULL) {
 		//tree was empty
 		setBSTroot(t, z);
+		setBSTNODEparent(z, z);
 	}
 	else if(t->comparator(value, getBSTNODEvalue(y)) < 0) {  // z < y
 		setBSTNODEleft(y, z);
@@ -215,7 +217,7 @@ BSTNODE *successorBST(BSTNODE *node) {
 		n = p;
 		p = getBSTNODEparent(p);
 	}
-	return (p == n )? NULL : p;
+	return p == n ? NULL : p;
 }
 
 BSTNODE *predecessorBST(BSTNODE *node) {
@@ -241,7 +243,7 @@ void pruneLeafBST(BST *t, BSTNODE *leaf) {
 	assert(getBSTNODEleft(leaf) == NULL);
 	assert(getBSTNODEright(leaf) == NULL);
 
-	if(getBSTNODEparent(leaf) == NULL) { // is root node
+	if(getBSTNODEparent(leaf) == NULL || getBSTNODEparent(leaf) == leaf) { // is root node
 		setBSTroot(t, NULL); // empty the tree
 		return;
 	}

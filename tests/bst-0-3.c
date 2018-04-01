@@ -12,13 +12,13 @@ long int random(void);
 int
 main(void)
     {
-    srandom(44);
+    srandom(104);
     //simple INTEGER test of BST
     int i;
     BST *p = newBST(displayINTEGER,compareINTEGER,0,freeINTEGER);
-    for (i = 0; i < 19; ++i)
+    for (i = 0; i < 15; ++i)
         {
-        int j = random() % 19;
+        int j = random() % 15;
         INTEGER *a = newINTEGER(j);
         if (findBST(p,a) == 0)
             insertBST(p,a);

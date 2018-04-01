@@ -13,7 +13,7 @@ long int random(void);
 int
 main(void)
     {
-    srandom(46);
+    srandom(106);
     //INTEGER test of AVL, nominal size is 189
     int i;
     AVL *p = newAVL(displayINTEGER,compareINTEGER,freeINTEGER);

@@ -1,11 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "integer.h"
+#include "real.h"
+#include "string.h"
 #include "queue.h"
 #include "bst.h"
 #include "avl.h"
-
-// this is avl-0-0.c
 
 void srandom(unsigned int);
 long int random(void);
@@ -13,46 +13,35 @@ long int random(void);
 int
 main(void)
     {
-    srandom(1);
-    //simple INTEGER test of AVL
+    srandom(104);
+    //INTEGER test of AVL, nominal size is 15
+    int i;
     AVL *p = newAVL(displayINTEGER,compareINTEGER,freeINTEGER);
-    insertAVL(p,newINTEGER(3));
-    insertAVL(p,newINTEGER(2));
+    for (i = 0; i < 15; ++i)
+        {
+        int j = random() % 15;
+        INTEGER *a = newINTEGER(j);
+		printf("AVL:\n");
+		displayAVL(p,stdout);
+		printf("\nINSERTING %i\n",getINTEGER(a));
+        if (findAVL(p,a) == 0)
+            insertAVL(p,a);
+        else
+            {
+            insertAVL(p,a);
+            freeINTEGER(a);
+            }
+        }
+    if (sizeAVL(p) < 200)
+        {
+        printf("AVL:\n");
+        displayAVL(p,stdout);
+        printf("debug: ");
+        displayAVLdebug(p,stdout);
+        printf("\n");
+        }
+    printf("size is %d\n",sizeAVL(p));
     statisticsAVL(p,stdout);
-    printf("AVL:\n");
-    displayAVL(p,stdout);
-    printf("debug: ");
-    displayAVLdebug(p,stdout);
-    printf("\n");
-    INTEGER *q = newINTEGER(2);
-    printf("is ");
-    displayINTEGER(q,stdout);
-    printf(" present? %s\n",findAVL(p,q) == 0? "no" : "yes");
-    INTEGER *r = newINTEGER(3);
-    freeINTEGER(deleteAVL(p,r));
-    statisticsAVL(p,stdout);
-    printf("AVL:\n");
-    displayAVL(p,stdout);
-    printf("debug: ");
-    displayAVLdebug(p,stdout);
-    printf("\n");
-    printf("is ");
-    displayINTEGER(q,stdout);
-    printf(" present? %s\n",findAVL(p,q) == 0? "no" : "yes");
-    setINTEGER(r,2);
-    freeINTEGER(deleteAVL(p,r));
-    statisticsAVL(p,stdout);
-    printf("AVL:\n");
-    displayAVL(p,stdout);
-    printf("debug: ");
-    displayAVLdebug(p,stdout);
-    printf("\n");
-    printf("is ");
-    displayINTEGER(q,stdout);
-    printf(" present? %s\n",findAVL(p,q) == 0? "no" : "yes");
-    printf("size: %d\n",sizeAVL(p));
-    freeINTEGER(q);
-    freeINTEGER(r);
     freeAVL(p);
     return 0;
     }

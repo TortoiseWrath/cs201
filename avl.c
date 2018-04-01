@@ -432,8 +432,9 @@ static void AVLrotate(BSTNODE *a, BSTNODE *b, BST *bst) {
 	setBSTNODEparent(a, p);
 	setBSTNODEparent(b, a);
 	if(c != NULL) setBSTNODEparent(c, b);
-	if(p == NULL) {
+	if(p == NULL || p == b) {
 		setBSTroot(bst, a);
+		setBSTNODEparent(a, a);
 	}
 	else {
 		if(getBSTNODEleft(p) == b) {
