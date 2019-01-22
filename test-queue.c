@@ -23,7 +23,9 @@ int main() {
 
 	setINTEGER(x, 77);
 	showItems(items); // <77>
-	displayINTEGER(dequeue(items), stdout); // 77
+	x = dequeue(items);
+	displayINTEGER(x, stdout); // 77
+	freeINTEGER(x);
 	putc('\n', stdout);
 	showItems(items); // <>
 
@@ -47,7 +49,9 @@ int main() {
 
 	displayINTEGER(peekQUEUE(items), stdout); // 1232
 	putc('\n', stdout);
-	displayINTEGER(dequeue(items), stdout); // 1232
+	x = dequeue(items);
+	displayINTEGER(x, stdout); // 1232
+	freeINTEGER(x);
 	putc('\n', stdout);
 	showItems(items); // <78,111,19,3,68,-4,6>
 

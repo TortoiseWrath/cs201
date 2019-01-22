@@ -115,7 +115,10 @@ void *removeDLL(DLL *items, int index) {
 	}
 
 	items->size--;
-	return getDLL_NODEvalue(cur);
+
+	void *val = getDLL_NODEvalue(cur);
+	free(cur); //free the node
+	return val;
 }
 
 // Moves all items in the donor list to the end of the recipient list.
@@ -123,8 +126,16 @@ void *removeDLL(DLL *items, int index) {
 // Does not check whether any nodes are identical between the two lists.
 // If two nodes are identical (same address) there will be problems.
 void unionDLL(DLL *recipient, DLL *donor) {
-	setDLL_NODEnext(recipient->tail, donor->head); // Transplant the donor head.
-	setDLL_NODEprev(donor->head, recipient->tail);
+	if(donor->size == 0) {
+		return; // do nothing
+	}
+	if(recipient->size == 0) {
+		recipient->head = donor->head;
+	}
+	else {
+		setDLL_NODEnext(recipient->tail, donor->head); // Transplant the head.
+		setDLL_NODEprev(donor->head, recipient->tail);
+	}
 	recipient->tail = donor->tail;
 	recipient->size += donor->size;
 
@@ -228,12 +239,12 @@ void displayDLLdebug(DLL *items, FILE *fp) {
 // Frees the DLL.
 /* This only frees about 60% of the memory but I haven't figured out why yet. */
 void freeDLL(DLL *items) {
-	assert(items->free != NULL);
-
 	DLL_NODE *n2 = items->head; // Start at the head
 	DLL_NODE *n;
 	while((n = n2)) {
-		(items->free)(getDLL_NODEvalue(n)); // Free the value
+		if(items->free != NULL) {
+			(items->free)(getDLL_NODEvalue(n)); // free the value
+		}
 		n2 = getDLL_NODEnext(n); // Save a pointer to the next node
 		free(n); // Free the node
 	}
