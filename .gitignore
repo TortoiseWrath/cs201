@@ -1,6 +1,10 @@
-/submission/
 submission/
 *.tgz
 *.o
 LusthsMakefile
 testing/
+tests2/
+sdgillen@*
+prelim/
+tests/
+a.out
