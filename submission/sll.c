@@ -97,7 +97,10 @@ void *removeSLL(SLL *items, int index) {
 	}
 
 	items->size--;
-	return getSLL_NODEvalue(cur);
+
+	void *val = getSLL_NODEvalue(cur);
+	free(cur); //free the node
+	return val;
 
 }
 
@@ -106,7 +109,15 @@ void *removeSLL(SLL *items, int index) {
 // Does not check whether any nodes are identical between the two lists.
 // If two nodes are identical (same address) there will be problems.
 void unionSLL(SLL *recipient, SLL *donor) {
-	setSLL_NODEnext(recipient->tail, donor->head); // Transplant the donor head.
+	if(donor->size == 0) { //empty donor
+		return; //do nothing
+	}
+	if(recipient->size == 0) {
+		recipient->head = donor->head;
+	}
+	else {
+		setSLL_NODEnext(recipient->tail, donor->head); // Transplant the head.
+	}
 	recipient->tail = donor->tail;
 	recipient->size += donor->size; // Sum the sizes.
 
@@ -195,15 +206,16 @@ void displaySLLdebug(SLL *items, FILE *fp) {
 // Frees the nodes.
 // Frees the SLL.
 void freeSLL(SLL *items) {
-	assert(items->free != NULL);
-
 	SLL_NODE *n; // Start at the head
 	SLL_NODE *n2 = items->head; // Start at the head
 	while((n = n2)) {
-		(items->free)(getSLL_NODEvalue(n)); // Free the value
+		if(items->free != NULL) {
+			(items->free)(getSLL_NODEvalue(n)); //free the value
+		}
 		n2 = getSLL_NODEnext(n); // Save a pointer to the next node
 		free(n); // Free the node
 	}
+
 	free(items); // Free the SLL
 	return;
 }

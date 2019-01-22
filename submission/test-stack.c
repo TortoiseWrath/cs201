@@ -23,7 +23,9 @@ int main() {
 
 	setINTEGER(x, 77);
 	showItems(items); // |77|
-	displayINTEGER(pop(items), stdout); // 77
+	x = pop(items);
+	displayINTEGER(x, stdout); // 77
+	freeINTEGER(x);
 	putc('\n', stdout);
 	showItems(items); // ||
 
@@ -47,7 +49,9 @@ int main() {
 
 	displayINTEGER(peekSTACK(items), stdout); // 6
 	putc('\n', stdout);
-	displayINTEGER(pop(items), stdout); // 6
+	x = pop(items);
+	displayINTEGER(x, stdout); // 6
+	freeINTEGER(x);
 	putc('\n', stdout);
 	showItems(items); // |-4,68,3,19,111,78,1232|
 

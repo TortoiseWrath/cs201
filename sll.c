@@ -97,7 +97,10 @@ void *removeSLL(SLL *items, int index) {
 	}
 
 	items->size--;
-	return getSLL_NODEvalue(cur);
+
+	void *val = getSLL_NODEvalue(cur);
+	free(cur); //free the node
+	return val;
 
 }
 
@@ -203,15 +206,16 @@ void displaySLLdebug(SLL *items, FILE *fp) {
 // Frees the nodes.
 // Frees the SLL.
 void freeSLL(SLL *items) {
-	assert(items->free != NULL);
-
 	SLL_NODE *n; // Start at the head
 	SLL_NODE *n2 = items->head; // Start at the head
 	while((n = n2)) {
-		(items->free)(getSLL_NODEvalue(n)); // Free the value
+		if(items->free != NULL) {
+			(items->free)(getSLL_NODEvalue(n)); //free the value
+		}
 		n2 = getSLL_NODEnext(n); // Save a pointer to the next node
 		free(n); // Free the node
 	}
+
 	free(items); // Free the SLL
 	return;
 }

@@ -12,7 +12,6 @@ static void showItems(DLL *items) {
 	printf(".\n");
 }
 
-
 int main() {
 	DLL *items2 = newDLL(displayINTEGER, freeINTEGER);
 	showItems(items2);
@@ -29,21 +28,27 @@ int main() {
 	x = newINTEGER(3);
 	insertDLL(items2,2,x); //1232 0 3 78 19 111
 	x = newINTEGER(68);
-	setDLL(items2,1,x); //1232 68 3 78 19 111
+	freeINTEGER(setDLL(items2,1,x)); //1232 68 3 78 19 111
 	x = newINTEGER(-4);
-	setDLL(items2,4,x); //1232 68 3 78 -4 111
+	freeINTEGER(setDLL(items2,4,x)); //1232 68 3 78 -4 111
 	x = newINTEGER(6);
-	setDLL(items2,6,x); //1232 68 3 78 -4 111 6
+	freeINTEGER(setDLL(items2,6,x)); //1232 68 3 78 -4 111 6
 	showItems(items2);
 	setINTEGER(x, 30); //1232 68 3 78 -4 111 30
 	showItems(items2);
-	displayINTEGER(removeDLL(items2,2), stdout); //3
+	x = removeDLL(items2,2);
+	displayINTEGER(x, stdout); //3
+	freeINTEGER(x);
 	putc('\n', stdout);
-	displayINTEGER(removeDLL(items2,5), stdout); //30
+
+	x = removeDLL(items2,5);
+	displayINTEGER(x, stdout); //30
+	freeINTEGER(x);
 	putc('\n', stdout);
-	displayINTEGER(removeDLL(items2,3), stdout); //-4
+	x = removeDLL(items2,3);
+	displayINTEGER(x, stdout); //-4
+	freeINTEGER(x);
 	putc('\n', stdout);
-	showItems(items2); //1232 68 78 111
 	displayINTEGER(getDLL(items2,3), stdout); //111
 	putc('\n', stdout);
 	displayINTEGER(getDLL(items2,1), stdout); //68
