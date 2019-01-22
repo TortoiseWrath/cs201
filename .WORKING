@@ -1,0 +1,12 @@
+/home/tortoise/school/cs201/proj1
+Wed Mar  7 12:01:34 CST 2018
+bst.c	 dll.o	     queue.c		      sll.c	  test-bst
+bst.h	 heap.c      queue.h		      sll.h	  test-bst.c
+bst.o	 heap.h      queue.o		      sll.o	  test-heap
+data2	 heap.o      real.c		      stack.c	  test-heap.c
+data3	 heapsort    real.h		      stack.h	  testing
+data4	 heapsort.c  real.o		      stack.o	  tests2
+data5	 integer.c   scanner.c		      string.c
+datahmm  integer.h   scanner.h		      string.h
+dll.c	 integer.o   scanner.o		      string.o
+dll.h	 Makefile    sdgillen@crimson.ua.edu  submission
