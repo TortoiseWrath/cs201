@@ -41,6 +41,8 @@ displayINTEGER(void *v,FILE *fp)
 int
 compareINTEGER(void *v,void *w)
     {
+	if(v == NULL) return 1;
+	if(w == NULL) return -1;
     return getINTEGER(v) - getINTEGER(w);
     }
 
