@@ -1,0 +1,11 @@
+pre-order: [2 [0] [5 [4] [13 [9 [8 [7]] [12]]]]]
+level: 2
+0 5
+4 13
+9
+8 12
+7
+size is 9
+Nodes: 9
+Minimum depth: 1
+Maximum depth: 5

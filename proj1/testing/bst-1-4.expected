@@ -1,0 +1,15 @@
+pre-order: [0 [9 [3 [4]] [13 [11 [10] [12]] [14]]]]
+level: 0
+9
+3 13
+4 11 14
+10 12
+size is 9
+pre-order: [3 [9 [4] [14]]]
+level: 3
+9
+4 14
+size is 4
+Nodes: 4
+Minimum depth: 0
+Maximum depth: 2
