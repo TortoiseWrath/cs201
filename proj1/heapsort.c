@@ -168,14 +168,14 @@ static int processOptions(int argc, char **argv) {
 static void giveExplanation() {
 	fputs("Written by Sean Gillen <sdgillen@crimson.ua.edu>\n", stdout);
 	fputs("My heapsort takes time O(n lg n) because it consists of:\n", stdout);
-	fputs("- an O(n) routine to read the input file\n", stdout);
+	fputs("- an O(n) routine to read the input file into the unheapified heap \n", stdout);
 	fputs("- a call to buildHEAP, which calls:\n", stdout);
 	fputs("    - peekSTACK (O(1)), getBSTNODEleft (O(1)), and pop (O(1)) each ⌈n/2⌉ times (O(n))\n", stdout);
 	fputs("    - heapify (T(n) ≤ T(2n/3) + θ(1) → O(lg n)) ⌊n/2⌋ times (O(n lg n))\n", stdout);
 	fputs("    - freeSTACK (O(n))\n", stdout);
 	fputs("    - bftraverse (O(n))\n", stdout);
 	fputs("- n calls to extractHEAP, each consisting of a constant number of calls to O(1) routines and one call to heapify (O(lg n))\n", stdout);
-	fputs("As such, the heapsort routine is O(n + n + n lg n + n + n + cn + n lg n) = O(n lg n).\n", stdout);
+	fputs("As such, the heapsort routine is O(n lg n + n + n lg n + n + n + cn + n lg n) = O(n lg n).\n", stdout);
 
 	exit(0);
 }
