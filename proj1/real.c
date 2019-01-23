@@ -41,7 +41,9 @@ displayREAL(void *v,FILE *fp)
 int
 compareREAL(void *v,void *w)
     {
-    return getREAL(v) - getREAL(w);
+	if (getREAL(v) > getREAL(w)) return 1;
+	if (getREAL(v) < getREAL(w)) return -1;
+    return 0;
     }
 
 void
